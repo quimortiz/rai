@@ -228,12 +228,6 @@ rai::Inertia& rai::Frame::getInertia() {
   return *inertia;
 }
 
-const char* rai::Frame::isPart() {
-  rai::String* p = ats.find<rai::String>("part");
-  if(p) return p->p;
-  return 0;
-}
-
 void rai::Frame::prefixSubtree(const char* prefix) {
   FrameL F = {this};
   getSubtree(F);

@@ -502,13 +502,13 @@ void CG2komo(KOMO& komo, const SubCG& scg, const rai::Configuration& C, bool col
     uint t=0;
     obj.getLastN(1) >>t;
     obj = obj.getFirstN(obj.N-2);
-    rai::Frame* f_C = C.getFrameByName(obj);
+    rai::Frame* f_C = C.getFrame(obj);
     CHECK(f_C, "");
     framesPerT(t).append(f_C->getPathToRoot());
   }
   for(uint t=0; t<=scg.maxT; t++) {
     framesPerT(t).sort().removeDoublesInSorted();
-    c->addFramesCopy(framesPerT(t));
+    c->addCopies(framesPerT(t), {});
 //    if(!t) for(rai::Frame *f:c->frames) if(f->joint) delete f->joint; //kill all DOFs at t=0
   }
   //delete joints without parents

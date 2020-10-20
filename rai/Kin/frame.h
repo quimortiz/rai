@@ -66,7 +66,7 @@ struct Transformation_Qtoken {
 
 //===========================================================================
 
-/// a Frame can have a link (also joint), shape (visual or coll), and/or intertia (mass) attached to it
+/// elementary data structure to form a Configuration; a frame represents a pose (potentially relative pose to a parent), and can have shape, intert, joint and forces associated, which imply configuration DOFs
 struct Frame : NonCopyable {
   Configuration& C;        ///< a Frame is uniquely associated with a Configuration
   uint ID;                 ///< unique identifier (index in Configuration.frames)
@@ -126,7 +126,6 @@ struct Frame : NonCopyable {
   FrameL getPathToRoot();
   Frame* getUpwardLink(rai::Transformation& Qtotal=NoTransformation, bool untilPartBreak=false) const; ///< recurse upward BEFORE the next joint and return relative transform (this->Q is not included!b)
   FrameL getPathToUpwardLink(bool untilPartBreak=false); ///< recurse upward BEFORE the next joint and return relative transform (this->Q is not included!b)
-  const char* isPart();
 
   void prefixSubtree(const char* prefix);
 
@@ -174,7 +173,7 @@ stdOutPipe(Frame)
 
 //===========================================================================
 
-/// for a Frame with Joint-Link, the relative transformation 'Q' is articulated
+/// for a Frame with joint, the relative transformation 'Q' is articulated
 struct Joint : NonCopyable {
   Frame* frame;      ///< this is the frame that Joint articulates! I.e., the output frame
 

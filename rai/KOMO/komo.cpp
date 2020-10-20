@@ -34,7 +34,7 @@
 #include "../Optim/opt-ipopt.h"
 #include "../Optim/opt-ceres.h"
 
-#include "../Core/util.tpp"
+#include "../Core/util.ipp"
 
 #include <iomanip>
 
@@ -61,10 +61,10 @@ template<> const char* rai::Enum<rai::KOMOsolver>::names []= {
 double shapeSize(const Configuration& K, const char* name, uint i=2);
 
 struct getQFramesAndScale_Return { uintA frames; arr scale; };
-getQFramesAndScale_Return getQFramesAndScale(const rai::Configuration& C);
+getQFramesAndScale_Return getCtrlFramesAndScale(const rai::Configuration& C);
 
 Shape* getShape(const Configuration& K, const char* name) {
-  Frame* f = K.getFrameByName(name);
+  Frame* f = K.getFrame(name);
   Shape* s = f->shape;
   if(!s) {
     for(Frame* b:f->children) if(b->name==name && b->shape) { s=b->shape; break; }
@@ -122,22 +122,22 @@ void KOMO::setTiming(double _phases, uint _stepsPerPhase, double durationPerPhas
 void KOMO::setPairedTimes() {
   CHECK_EQ(k_order, 1, "NIY");
   for(uint s=1; s<T; s+=2) {
-    configurations(s)  ->setTimes(1.98*tau); //(tau*(.98+int(s+1)-int(k_order)));
-    configurations(s+1)->setTimes(0.02*tau); //(tau*(int(s)-int(k_order)));
+    configurations(s)  ->setTaus(1.98*tau); //(tau*(.98+int(s+1)-int(k_order)));
+    configurations(s+1)->setTaus(0.02*tau); //(tau*(int(s)-int(k_order)));
   }
 }
 
 void KOMO::activateCollisions(const char* s1, const char* s2) {
   if(!computeCollisions) return;
-  Frame* sh1 = world.getFrameByName(s1);
-  Frame* sh2 = world.getFrameByName(s2);
+  Frame* sh1 = world.getFrame(s1);
+  Frame* sh2 = world.getFrame(s2);
   if(sh1 && sh2) world.swift()->activate(sh1, sh2);
 }
 
 void KOMO::deactivateCollisions(const char* s1, const char* s2) {
   if(!computeCollisions) return;
-  Frame* sh1 = world.getFrameByName(s1);
-  Frame* sh2 = world.getFrameByName(s2);
+  Frame* sh1 = world.getFrame(s1);
+  Frame* sh2 = world.getFrame(s2);
   if(sh1 && sh2) world.swift()->deactivate(sh1, sh2);
   else LOG(-1) <<"not found:" <<s1 <<' ' <<s2;
 }
@@ -189,7 +189,7 @@ ptr<Objective> KOMO::addObjective(const arr& times,
 
   if(!!frames && frames.N){
     if(frames.N==1 && frames.scalar()=="ALL") f->frameIDs = framesToIndices(world.frames); //important! this means that, if no explicit selection of frames was made, all frames (of a time slice) are referred to
-    else f->frameIDs = stringListToFrameIndices(frames, world);
+    else f->frameIDs = world.getFrameIDs(frames);
   }
   if(!!scale) f->scale = scale;
   if(!!target) f->target = target;
@@ -598,7 +598,7 @@ void KOMO_ext::setHoming(double startTime, double endTime, double prec, const ch
 //}
 
 ptr<Objective> KOMO::add_qControlObjective(const arr& times, uint order, double scale, const arr& target, int deltaFromStep, int deltaToStep) {
-  auto F = getQFramesAndScale(world);
+  auto F = getCtrlFramesAndScale(world);
   scale *= sqrt(tau);
 
   CHECK_GE(k_order, order, "");
@@ -607,7 +607,7 @@ ptr<Objective> KOMO::add_qControlObjective(const arr& times, uint order, double 
 }
 
 void KOMO_ext::setSquaredQAccVelHoming(double startTime, double endTime, double accPrec, double velPrec, double homingPrec, int deltaFromStep, int deltaToStep) {
-  auto F = getQFramesAndScale(world);
+  auto F = getCtrlFramesAndScale(world);
   F.scale *= sqrt(tau);
 
   if(accPrec) {
@@ -643,7 +643,7 @@ void KOMO::addSquaredQuaternionNorms(double startTime, double endTime, double pr
 }
 
 void KOMO_ext::setHoldStill(double startTime, double endTime, const char* shape, double prec) {
-  Frame* s = world.getFrameByName(shape);
+  Frame* s = world.getFrame(shape);
   addObjective({startTime, endTime}, make_shared<F_qItself>(TUP(s->ID)), {}, OT_sos, {prec}, NoArr, 1);
 }
 
@@ -1258,9 +1258,9 @@ void KOMO_ext::setAlignedStacking(double time, const char* object, ObjectiveType
 
 void KOMO::add_collision(bool hardConstraint, double margin, double prec) {
   if(hardConstraint) { //interpreted as hard constraint (default)
-    addObjective({}, make_shared<F_AccumulatedCollisions>(TMT_allP, uintA(), margin), {"ALL"}, OT_eq, {prec}, NoArr);
+    addObjective({}, make_shared<F_AccumulatedCollisions>(margin), {"ALL"}, OT_eq, {prec}, NoArr);
   } else { //cost term
-    addObjective({}, make_shared<F_AccumulatedCollisions>(TMT_allP, uintA(), margin), {"ALL"}, OT_sos, {prec}, NoArr);
+    addObjective({}, make_shared<F_AccumulatedCollisions>(margin), {"ALL"}, OT_sos, {prec}, NoArr);
   }
 }
 
@@ -2043,7 +2043,7 @@ void KOMO::setupConfigurations(const arr& q_init, const uintA& q_initJoints) {
 
     rai::Configuration* C = configurations.append(new Configuration());
     C->copy(world, true);
-    C->setTimes(tau);
+    C->setTaus(tau);
     for(KinematicSwitch* sw:switches) { //apply potential switches
       if(sw->timeOfApplication+(int)k_order<=0) {
         sw->apply(C->frames);
@@ -2068,7 +2068,7 @@ void KOMO::setupConfigurations(const arr& q_init, const uintA& q_initJoints) {
     rai::Configuration* C = configurations.append(new Configuration());
     C->copy(*configurations(s-1), true);
     CHECK_EQ(configurations(s), configurations.last(), "");
-    C->setTimes(tau);
+    C->setTaus(tau);
     if(!!q_init && s>k_order) C->setJointState(q_init, q_initJoints);
     for(KinematicSwitch* sw:switches) { //apply potential switches
       if(sw->timeOfApplication+k_order==s) {
@@ -2155,7 +2155,7 @@ void KOMO::setupConfigurations2() {
 
   rai::Configuration C;
   C.copy(world, true);
-  C.setTimes(tau);
+  C.setTaus(tau);
 
   if(computeCollisions) {
     CHECK(!fcl, "");
@@ -2172,10 +2172,7 @@ void KOMO::setupConfigurations2() {
 //      if(sw->timeOfApplication+(int)k_order==(int)s)  sw->apply(C.frames);
 //    }
 
-    uint nBefore = pathConfig.frames.N;
-    pathConfig.addFramesCopy(C.frames, C.forces);
-//    timeSlices[s] = pathConfig.frames({nBefore, -1});
-
+    pathConfig.addCopies(C.frames, C.forces);
   }
   timeSlices = pathConfig.frames;
 

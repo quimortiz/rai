@@ -63,7 +63,7 @@ void TEST(Dynamics){
       //G.clearForces();
       //G.gravityToForces();
       G.fwdDynamics(qdd, qd, u);
-      CHECK(maxDiff(qdd,qdd_,0)<1e-5,"dynamics and inverse dynamics inconsistent");
+      CHECK_ZERO(maxDiff(qdd,qdd_,0), 1e-5, "dynamics and inverse dynamics inconsistent");
       //cout <<q <<qd <<qdd <<endl;
       cout <<"test dynamics: fwd-inv error =" <<maxDiff(qdd,qdd_,0) <<endl;
       q  += .5*dt*qd;

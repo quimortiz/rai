@@ -1129,7 +1129,7 @@ Eigen::MatrixXd conv_arr2eigen(const arr& in);
 
 void linkArray();
 
-#include "array.tpp"
+#include "array.ipp"
 
 #endif //SWIG
 

@@ -80,7 +80,8 @@ include $(BASE)/build/defines.mk
 # (a tag like `OPTIM=fast' in the local Makefiles changes default debug mode)
 
 ifndef CXX
-CXX	= g++
+#CXX	= g++
+CXX	= clang++
 CC	= gcc
 endif
 MOC = moc

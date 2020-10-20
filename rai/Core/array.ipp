@@ -1172,6 +1172,7 @@ template<class T> rai::Array<T> rai::Array<T>::sub(int i, int I, Array<uint> col
   return x;
 }
 
+///
 template<class T> rai::Array<T> rai::Array<T>::sub(Array<uint> elems) const {
   rai::Array<T> x;
   if(nd==1) {

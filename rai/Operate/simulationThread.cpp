@@ -120,7 +120,7 @@ void SimulationThread::loop() {
   }
 }
 
-bool SimulationThread::executeMotion(const StringA& joints, const arr& path, const arr& times, double timeScale, bool append) {
+bool SimulationThread::executeMotion(const uintA& joints, const arr& path, const arr& times, double timeScale, bool append) {
   auto lock = stepMutex(RAI_HERE);
   SIM.setUsedRobotJoints(joints);
   SIM.exec(path, times*timeScale, append);
@@ -135,12 +135,12 @@ void SimulationThread::execGripper(const rai::String& gripper, double position, 
     //  komo->addObjective(0.,0., FS_qItself, {"r_gripper_joint"}, OT_sos, 1e1, {.08} );
     //  komo->addObjective(0.,0., FS_qItself, {"r_gripper_l_finger_joint"}, OT_sos, 1e1, {.8} );
 
-    SIM.setUsedRobotJoints({"r_gripper_joint", "r_gripper_l_finger_joint"});
+    SIM.setUsedRobotJoints(SIM.K.getFrameIDs({"r_gripper_joint", "r_gripper_l_finger_joint"}));
     SIM.exec({{1, 2}, {position, position*10.}}, {1.}, true);
     return;
   }
   if(gripper=="pandaL") {
-    SIM.setUsedRobotJoints({"L_panda_finger_joint1"});
+    SIM.setUsedRobotJoints(SIM.K.getFrameIDs({"L_panda_finger_joint1"}));
     SIM.exec(arr({1, 1}, {position}), {1.}, true);
     return;
   }
@@ -162,14 +162,14 @@ void SimulationThread::attach(const char* a, const char* b) {
 
 arr SimulationThread::getJointPositions(const StringA& joints) {
   auto lock = stepMutex(RAI_HERE);
-  SIM.setUsedRobotJoints(joints);
+  SIM.setUsedRobotJoints(SIM.K.getFrameIDs(joints));
   arr q = SIM.getJointState();
   return q;
 }
 
-void SimulationThread::addFile(const char* filename, const char* parentOfRoot, const rai::Transformation& relOfRoot) {
+void SimulationThread::addFile(const char* filename/*, const char* parentOfRoot, const rai::Transformation& relOfRoot*/) {
   auto lock = stepMutex(RAI_HERE);
-  SIM.K.addFile(filename, parentOfRoot, relOfRoot);
+  SIM.K.addFile(filename/*, parentOfRoot, relOfRoot*/);
   //SIM.K.calc_activeSets();
   //SIM.K.calc_fwdPropagateFrames();
   //SIM.K.checkConsistency();

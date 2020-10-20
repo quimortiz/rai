@@ -226,7 +226,6 @@ struct ArrayG : rai::Array<T*>, GraphEditCallback {
   }
   T& operator()(Node* n) {
     CHECK_EQ(this->N, G.N+1, "");
-//    if(this->N != G.N+1) listResizeCopy(*this, G.N+1); //redundant, given the callback mechanisms...
     T*& x = (!n? this->elem(0) : this->elem(n->index+1)); //x is a reference!
     if(!x) x = new T(); //...assigned here
     return *x;
@@ -338,7 +337,7 @@ typedef rai::Array<std::shared_ptr<Type>> TypeInfoL;
 //===========================================================================
 //===========================================================================
 //
-// definition of template methods - could move this to graph.tpp
+// definition of template methods - could move this to graph.ipp
 //
 //===========================================================================
 //===========================================================================

@@ -275,43 +275,48 @@ void F_Link::updateFeatherstones() {
 
 void FeatherstoneInterface::setGravity(double g) {
   rai::Vector grav(0, 0, g);
-  for(rai::Frame* f: K.frames) {
+  for(rai::Frame* f: C.frames) {
     F_Link& link=tree(f->ID);
     link.force = link.mass * grav;
   }
 }
 
 void FeatherstoneInterface::update() {
-  if(tree.N != K.frames.N) { //new instance -> create the tree
-    CHECK_EQ(K.frames, sortedFrames, "Featherstone requires a sorted optimized frame tree (call optimizeTree and fwdIndexIDs)");
+  if(tree.N != C.frames.N) { //new instance -> create the tree
+    CHECK_EQ(C.frames, sortedFrames, "Featherstone requires a sorted optimized frame tree (call optimizeTree and fwdIndexIDs)");
     tree.clear();
-    tree.resize(K.frames.N);
+    tree.resize(C.frames.N);
 
     for(F_Link& link:tree) { link.parent=-1; link.qIndex=-1; link.com.setZero(); } //TODO: remove
 
-    for(rai::Frame* f : K.frames) {
+    uint n=0;
+    for(rai::Frame* f : C.frames) {
       F_Link& link=tree(f->ID);
       link.ID = f->ID;
       link.X = f->ensure_X();
       if(f->parent) { //is not a root
         link.parent = f->parent->ID;
         link.Q = f->get_Q();
-        rai::Joint* j;
-        if((j=f->joint)) {
+        rai::Joint* j=f->joint;
+        if(j && !j->mimic) {
           link.type   = j->type;
           link.qIndex = j->qIndex;
         } else {
+          if(j && j->mimic) LOG(0) <<"Featherstone cannot handle mimic joint ('" <<f->name <<"') properly - assuming rigid";
           link.type   = rai::JT_rigid;
         }
+//        if(j) CHECK_EQ(j->dim, link.dof(), "");
       }
       if(f->inertia) {
         link.com = f->inertia->com;
         link.mass=f->inertia->mass; CHECK(link.mass>0. || link.qIndex==-1, "a moving link without mass -> this will diverge");
         link.inertia=f->inertia->matrix;
       }
+      n += link.dof();
     }
+//    CHECK_EQ(n, C.getJointStateDimension(), "");
   } else { //just update an existing structure
-    for(rai::Frame* f: K.frames) {
+    for(rai::Frame* f: C.frames) {
       F_Link& link=tree(f->ID);
       link.X = f->ensure_X();
       if(f->parent) link.Q = f->get_Q();
@@ -853,7 +858,7 @@ void FeatherstoneInterface::invDynamics(arr& tau,
     }
     Xup[i] = tree(i)._Q; //the transformation from the i-th to the j-th
   }
-  CHECK(n==qd.N && n==qdd.N && n==tau.N, "")
+  //CHECK(n==qd.N && n==qdd.N && n==tau.N, "")
 
   for(i=0; i<N; i++) {
     par = tree(i).parent;

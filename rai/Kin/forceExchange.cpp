@@ -27,10 +27,11 @@ rai::ForceExchange::ForceExchange(rai::Frame& a, rai::Frame& b, rai::ForceExchan
 }
 
 rai::ForceExchange::~ForceExchange() {
-  a.C.reset_q();
+  rai::Configuration& C = a.C;
+  C.reset_q();
   a.forces.removeValue(this);
   b.forces.removeValue(this);
-  a.C.forces.removeValue(this);
+  C.forces.removeValue(this);
 }
 
 void rai::ForceExchange::setZero() {

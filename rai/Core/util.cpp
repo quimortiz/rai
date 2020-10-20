@@ -1392,7 +1392,7 @@ const char* niceTypeidName(const std::type_info& type) {
 // explicit instantiations
 //
 
-#include "util.tpp"
+#include "util.ipp"
 template void rai::getParameter(int&, const char*);
 template void rai::getParameter(int&, const char*, const int&);
 template void rai::getParameter(uint&, const char*);

@@ -31,12 +31,12 @@ void testFeature() {
 
   rai::ForceExchange con(*obj1, *obj2);
 
-  C.setTimes(.1);
+  C.setTaus(.1);
 
   rai::Configuration Ctuple;
-  Ctuple.addFramesCopy(C.frames);
-  Ctuple.addFramesCopy(C.frames);
-  Ctuple.addFramesCopy(C.frames);
+  Ctuple.addCopies(C.frames, {});
+  Ctuple.addCopies(C.frames, {});
+  Ctuple.addCopies(C.frames, {});
   Ctuple.jacMode = rai::Configuration::JM_rowShifted;
 
   uint n=Ctuple.getJointStateDimension();

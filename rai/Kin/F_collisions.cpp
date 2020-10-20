@@ -61,7 +61,7 @@ void F_AccumulatedCollisions::phi2(arr& y, arr& J, const FrameL& F) {
   C.kinematicsZero(y, J, 1);
   for(const rai::Proxy& p: C.proxies) {
     if(F.contains(p.a) && F.contains(p.b)) {
-      C.kinematicsProxyCost(y, J, p, margin, true);
+      C.kinematicsPenetration(y, J, p, margin, true);
     }
   }
 }

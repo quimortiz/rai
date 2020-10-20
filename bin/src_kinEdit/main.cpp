@@ -24,7 +24,8 @@ int main(int argc,char **argv){
     Inotify ino(file);
     try {
       rai::lineCount=1;
-      C.init(file);
+      C.clear();
+      C.addFile(file);
       C.report();
       break;
     } catch(std::runtime_error& err) {
@@ -62,7 +63,7 @@ int main(int argc,char **argv){
   //-- save file in different formats
   FILE("z.g") <<C;
   C.writeURDF(FILE("z.urdf"));
-  C.writeCollada("z.dae");
+  C.writeAssimp("z.dae");
   if(rai::checkParameter<bool>("dot")) C.displayDot();
 
   if(rai::checkParameter<bool>("cleanOnly")) return 0;
