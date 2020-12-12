@@ -29,6 +29,8 @@
 
 using namespace physx;
 
+namespace rai {
+
 struct PhysXSingleton {
   PxFoundation* mFoundation = nullptr;
   PxPhysics* mPhysics = nullptr;
@@ -723,6 +725,9 @@ void PhysXInterface::addForce(rai::Vector& force, rai::Frame* b, rai::Vector& po
 #else //RAI_PHYSX
 
 #include "kin_physx.h"
+
+namespace rai {
+
 PhysXInterface::PhysXInterface(const rai::Configuration& C, int verbose) : self(nullptr) { NICO }
 PhysXInterface::~PhysXInterface() { NICO }
 
@@ -743,6 +748,8 @@ void PhysXInterface::addForce(rai::Vector& force, rai::Frame* b, rai::Vector& po
 void glPhysXInterface(void* classP) { NICO }
 
 #endif
+
+} //namespace
 
 #ifdef RAI_PHYSX
 RUN_ON_INIT_BEGIN(kin_physx)

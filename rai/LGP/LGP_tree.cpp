@@ -31,9 +31,9 @@ bool sortComp2(const OptLGP_SolutionDataPtr& a, const OptLGP_SolutionDataPtr& b)
   return sortComp(a->node, b->node);
 }
 
-struct DisplayThread : MiniThread {
+struct DisplayThread : rai::MiniThread {
   LGP_Tree* lgp;
-  OpenGL gl;
+  rai::OpenGL gl;
   uint t=0;
   bool saveVideo=false;
   DisplayThread(LGP_Tree* lgp) : MiniThread("OptLGP_Display"), lgp(lgp), gl("OptLGP", 3*displaySize, 2*displaySize) {}
@@ -156,9 +156,9 @@ LGP_Tree::~LGP_Tree() {
 void LGP_Tree::initDisplay() {
   if(verbose>2 && !views.N) {
     views.resize(4);
-    views(1) = make_shared<KinPathViewer>(Var<ConfigurationL>(), 1.2, -1);
-    views(2) = make_shared<KinPathViewer>(Var<ConfigurationL>(), 1.2, -1);
-    views(3) = make_shared<KinPathViewer>(Var<ConfigurationL>(), .05, -2);
+    views(1) = make_shared<rai::KinPathViewer>(rai::Var<ConfigurationL>(), 1.2, -1);
+    views(2) = make_shared<rai::KinPathViewer>(rai::Var<ConfigurationL>(), 1.2, -1);
+    views(3) = make_shared<rai::KinPathViewer>(rai::Var<ConfigurationL>(), .05, -2);
     for(auto& v:views) if(v) v->copy.orsDrawJoints=v->copy.orsDrawMarkers=v->copy.orsDrawProxies=false;
   }
   if(!dth) dth = make_shared<DisplayThread>(this);
@@ -216,7 +216,7 @@ void LGP_Tree::updateDisplay() {
   solutions.writeAccess();
   for(uint i=0; i<solutions().N && i<6; i++) {
     if(dth->gl.views.N<=i || !dth->gl.views(i).drawers.N) {
-      dth->gl.addSubView(i, glStandardScene, nullptr);
+      dth->gl.addSubView(i, rai::glStandardScene, nullptr);
       dth->gl.addSubView(i, *solutions()(i));
       dth->gl.views(i).camera.setDefault();
       if(cameraFocus.N) dth->gl.views(i).camera.focus(cameraFocus, true);
@@ -296,7 +296,7 @@ void LGP_Tree::inspectSequence(const rai::String& seq) {
   auto S = node->getSkeleton();
   writeSkeleton(cout, S, getSwitchesFromSkeleton(S));
 
-  ptr<OpenGL> gl = make_shared<OpenGL>();
+  ptr<rai::OpenGL> gl = make_shared<rai::OpenGL>();
   gl->camera.setDefault();
 
   //-- first test pose bounds along the path
@@ -417,7 +417,7 @@ void LGP_Tree::writeNodeList(std::ostream& os) {
   }
 }
 
-void LGP_Tree::glDraw(OpenGL& gl) {
+void LGP_Tree::glDraw(rai::OpenGL& gl) {
 }
 
 bool LGP_Tree::execChoice(rai::String cmd) {
@@ -705,7 +705,7 @@ void LGP_Tree_SolutionData::write(std::ostream& os) const {
      <<endl;
 }
 
-void LGP_Tree_SolutionData::glDraw(OpenGL& gl) {
+void LGP_Tree_SolutionData::glDraw(rai::OpenGL& gl) {
 #ifdef RAI_GL
   BoundType displayBound=tree.displayBound;
 

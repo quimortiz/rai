@@ -10,6 +10,12 @@
 
 #include "mesh.h"
 
+struct aiNode;
+struct aiMesh;
+struct aiScene;
+
+namespace rai {
+
 struct AssimpLoader {
   rai::Array<MeshA> meshes;
   rai::Array<rai::Transformation> poses;
@@ -19,14 +25,16 @@ struct AssimpLoader {
   int verbose=0;
 
   AssimpLoader(std::string const& path, bool flipYZ=true, bool relativeMeshPoses=false);
-  AssimpLoader(const struct aiScene* scene);
+  AssimpLoader(const aiScene* scene);
 
   rai::Mesh getSingleMesh();
 
  private:
-  void loadNode(const struct aiNode* node, const struct aiScene* scene, arr T, bool relativeMeshPoses);
-  rai::Mesh loadMesh(const struct aiMesh* mesh, const struct aiScene* scene);
+  void loadNode(const aiNode* node, const aiScene* scene, arr T, bool relativeMeshPoses);
+  rai::Mesh loadMesh(const aiMesh* mesh, const aiScene* scene);
 };
 
-void buildAiMesh(const rai::Mesh& M, struct aiMesh* pMesh);
+void buildAiMesh(const rai::Mesh& M, aiMesh* pMesh);
 void writeAssimp(const rai::Mesh& M, const char* filename, const char* format);
+
+} //namespace

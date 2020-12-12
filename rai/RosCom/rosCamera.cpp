@@ -17,7 +17,7 @@ struct sRosCamera {
   ptr<SubscriberConv<sensor_msgs::Image, floatA, &conv_imageFloat32_floatA>> subDepthFloat;
   ptr<SubscriberConv<sensor_msgs::Image, floatA, &conv_imageu162floatA>> subDepthUint16;
 
-  sRosCamera(const char* rosNodeName, Var<byteA>& rgb, Var<floatA>& depth, bool useUint) : ROS(rosNodeName) {
+  sRosCamera(const char* rosNodeName, rai::Var<byteA>& rgb, rai::Var<floatA>& depth, bool useUint) : ROS(rosNodeName) {
     if(rgb.name().N) ROS.subscribe(subRgb, rgb);
     if(useUint) {
       if(depth.name().N) ROS.subscribe(subDepthUint16, depth);
@@ -27,7 +27,7 @@ struct sRosCamera {
   }
 };
 
-RosCamera::RosCamera(Var<byteA>& _rgb, Var<floatA> _depth,
+RosCamera::RosCamera(rai::Var<byteA>& _rgb, rai::Var<floatA> _depth,
                      const char* rosNodeName,
                      const char* rgb_topic,
                      const char* depth_topic,
@@ -45,7 +45,7 @@ RosCamera::~RosCamera() {
 
 struct sRosCamera {};
 
-RosCamera::RosCamera(Var<byteA>& _rgb, Var<floatA> _depth,
+RosCamera::RosCamera(rai::Var<byteA>& _rgb, rai::Var<floatA> _depth,
                      const char* rosNodeName,
                      const char* rgb_topic,
                      const char* depth_topic,

@@ -1,16 +1,16 @@
 #include <Gui/opengl.h>
 #include <Core/thread.h>
 
-void draw1(void*, OpenGL& gl){
-  glStandardLight(nullptr, gl);
+void draw1(void*, rai::OpenGL& gl){
+  rai::glStandardLight(nullptr, gl);
   glColor3f(1,0,0);
   //glDrawBox(1.,1.,1.);
   glutSolidTeapot(1.);
 }
 
-struct Proc:public Thread{
-  OpenGL *gl=0;
-  Proc(const char* name):Thread(name, 0.05){
+struct Proc : public rai::Thread{
+  rai::OpenGL *gl=0;
+  Proc(const char* name) : Thread(name, 0.05){
     threadLoop();
   }
   ~Proc(){
@@ -18,7 +18,7 @@ struct Proc:public Thread{
   }
 
   void open(){
-    gl = new OpenGL(name);
+    gl = new rai::OpenGL(name);
     gl->add(draw1);
     gl->update();
   }
@@ -38,14 +38,14 @@ void TEST(ThreadedOpenGL) {
 
   Proc *gli;
   rai::Array<rai::String> names;
-  ThreadL procs;
+  rai::ThreadL procs;
   for (int i=0; i<20; ++i){
     names.append(STRING("many_"<<i));
     gli = new Proc(names(i));
     procs.append(gli);
   }
   rai::wait(5.);
-  for(Thread* th : procs) th->threadClose();
+  for(rai::Thread* th : procs) th->threadClose();
 }
 
 int MAIN(int argc, char **argv){

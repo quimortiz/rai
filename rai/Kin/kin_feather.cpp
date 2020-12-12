@@ -10,6 +10,8 @@
 #include "frame.h"
 #include "kin.h"
 
+namespace rai {
+
 /** interface and implementation to Featherstone's Articulated Body Algorithm
 
   See resources from http://users.rsise.anu.edu.au/~roy/spatial/index.html
@@ -1015,3 +1017,5 @@ void FeatherstoneInterface::fwdDynamics_MF(arr& qdd,
 //                                const arr& qd,
 //                                const arr& qdd) { NIY; }
 // #endif
+
+} //namespace

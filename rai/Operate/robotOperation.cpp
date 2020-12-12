@@ -13,14 +13,16 @@
 #include "../Gui/opengl.h"
 
 //#include "SimulationThread_self.h"
-extern bool Geo_mesh_drawColors;
+namespace rai {
+  extern bool Geo_mesh_drawColors;
+}
 
-struct sRobotOperation : Thread, GLDrawer {
+struct sRobotOperation : rai::Thread, rai::GLDrawer {
   BaxterInterface baxter;
   arr q0, q_ref;
   uintA jointIDs;
   rai::Configuration K_ref, K_baxter;
-  OpenGL gl;
+  rai::OpenGL gl;
   bool useBaxter=false;
   bool sendToBaxter=false;
 
@@ -73,9 +75,9 @@ struct sRobotOperation : Thread, GLDrawer {
     }
   }
 
-  void glDraw(OpenGL& gl) {
+  void glDraw(rai::OpenGL& gl) {
     //        auto lock = stepMutex(RAI_HERE);
-    glStandardScene(nullptr, gl);
+    rai::glStandardScene(nullptr, gl);
     K_ref.glDraw(gl);
 //    auto lock = gl.dataLock(RAI_HERE);
     if(useBaxter) {
@@ -83,11 +85,11 @@ struct sRobotOperation : Thread, GLDrawer {
       if(q_real.N == K_baxter.getJointStateDimension()) {
         K_baxter.setJointState(q_real);
       }
-      Geo_mesh_drawColors=false;
-      glColor(.8, .2, .2, .5);
+      rai::Geo_mesh_drawColors=false;
+      rai::glColor(.8, .2, .2, .5);
       gl.drawMode_idColor = true;
       K_baxter.glDraw(gl);
-      Geo_mesh_drawColors=true;
+      rai::Geo_mesh_drawColors=true;
       gl.drawMode_idColor = false;
     }
   }

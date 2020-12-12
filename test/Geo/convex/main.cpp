@@ -15,13 +15,13 @@ void plotQhullState(uint D) {
   facetT *facet;
   arr x, lines;
 
-  plot->Clear();
+  rai::plot->Clear();
 
   cout <<"\n** points:";
   FORALLpoints {
     x.setCarray(point, D);
     cout <<"\n  " <<x;
-    plot->Points(x);
+    rai::plot->Points(x);
   }
 
   cout <<"\n** vertices:";
@@ -43,7 +43,7 @@ void plotQhullState(uint D) {
     x.setCarray(((vertexT*)(facet->vertices->e[0].p))->point, D);
     lines.append(x);
     lines.reshape(lines.N/D, D);
-    plot->Line(lines);
+    rai::plot->Line(lines);
   }
   cout <<endl;
 }
@@ -74,7 +74,7 @@ void TEST(ConvexHull) {
     if(p.d0) {
       arr line = ~origin;
       line.append(p);
-      plot->Line(line);
+      rai::plot->Line(line);
     }
 //    plot->Opengl();
 
@@ -132,9 +132,9 @@ void TEST(ForceClosure) {
 
   Xn=X;  for(i=0;i<N;i++) Xn[i]() /= length(Xn[i]);
 
-  plot->Opengl();
-  plot->Clear(); plot->Points(c); plot->Points(X); plot->VectorField(X,Xn);
-  plot->update(false);
+  rai::plot->Opengl();
+  rai::plot->Clear(); rai::plot->Points(c); rai::plot->Points(X); rai::plot->VectorField(X,Xn);
+  rai::plot->update(false);
 
   arr dFdX;
 
@@ -146,8 +146,8 @@ void TEST(ForceClosure) {
   for(k=0;k<1000;k++){
     d=forceClosure(X,Xn,center,.5,10.,&dFdX);
     cout <<"d=" <<d <<endl;
-    plot->Clear(); plot->Points(c); plot->Points(X); plot->VectorField(X,Xn);
-    plot->update(false);
+    rai::plot->Clear(); rai::plot->Points(c); rai::plot->Points(X); rai::plot->VectorField(X,Xn);
+    rai::plot->update(false);
     X -= .005*dFdX;
     Xn=X;  for(i=0;i<N;i++) Xn[i]() /= -length(Xn[i]);
   }
@@ -231,12 +231,12 @@ void testConvConvIntersect(){
     arr C = convconv_intersect(C1, C2);
     cout <<"#C=" <<C.d0 <<endl;
 
-    plot->Clear();
-    plot->Line(C+.002, true);
-    plot->Line(C-.002, true);
-    plot->Line(C1, true);
-    plot->Line(C2, true);
-    plot->Opengl();
+    rai::plot->Clear();
+    rai::plot->Line(C+.002, true);
+    rai::plot->Line(C-.002, true);
+    rai::plot->Line(C1, true);
+    rai::plot->Line(C2, true);
+    rai::plot->Opengl();
 
     rai::wait();
   }
@@ -257,17 +257,17 @@ void testConvConvIntersect(){
 
     arr C = convconv_intersect(C1, C2);
 
-    plot->Clear();
-    plot->Line(C+.002, true);
-    plot->Line(C-.002, true);
-    plot->Line(C1, true);
-    plot->Line(C2, true);
-    plot->Opengl();
+    rai::plot->Clear();
+    rai::plot->Line(C+.002, true);
+    rai::plot->Line(C-.002, true);
+    rai::plot->Line(C1, true);
+    rai::plot->Line(C2, true);
+    rai::plot->Opengl();
 
     rai::wait();
   }
 
-  plot->Close();
+  rai::plot->Close();
 }
 
 //===========================================================================

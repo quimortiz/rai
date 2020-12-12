@@ -178,7 +178,7 @@ struct OptOptions {
 };
 stdOutPipe(OptOptions)
 
-extern Singleton<OptOptions> globalOptOptions;
+extern rai::Singleton<OptOptions> globalOptOptions;
 extern OptOptions *__globalOptOptions;
 
 #define NOOPT (globalOptOptions())

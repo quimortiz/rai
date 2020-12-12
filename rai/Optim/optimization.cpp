@@ -9,7 +9,7 @@
 #include "optimization.h"
 
 uint eval_count=0;
-Singleton<OptOptions> globalOptOptions;
+rai::Singleton<OptOptions> globalOptOptions;
 OptOptions *__globalOptOptions=0;
 ObjectiveTypeA __NoTermTypeA(new SpecialArray(SpecialArray::ST_NoArr));
 ObjectiveTypeA& NoObjectiveTypeA = __NoTermTypeA;
@@ -122,7 +122,7 @@ void displayFunction(const ScalarFunction& f, bool wait, double lo, double hi) {
   Y.reshape(101, 101);
 //  plot->Gnuplot();  plot->Surface(Y);  plot->update(true);
   write(LIST<arr>(Y), "z.fct");
-  gnuplot("reset; splot [-1:1][-1:1] 'z.fct' matrix us ($1/50-1):($2/50-1):3 w l", wait, true);
+  rai::gnuplot("reset; splot [-1:1][-1:1] 'z.fct' matrix us ($1/50-1):($2/50-1):3 w l", wait, true);
 }
 
 /// minimizes \f$f(x)\f$ using its gradient only
@@ -164,7 +164,7 @@ uint optGradDescent(arr& x, const ScalarFunction& f, OptOptions o) {
     if(k>o.stopIters) break;
   }
   if(o.verbose>0) fil.close();
-  if(o.verbose>1) gnuplot("plot 'z.opt' us 1:3 w l", true);
+  if(o.verbose>1) rai::gnuplot("plot 'z.opt' us 1:3 w l", true);
   return evals;
 }
 

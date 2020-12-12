@@ -105,7 +105,7 @@ struct LGP_Node {
   Graph getInfo() const;
   void getGraph(Graph& G, Node* n=nullptr, bool brief=false);
   Graph getGraph(bool brief=false) { Graph G; getGraph(G, nullptr, brief); G.checkConsistency(); return G; }
-  void displayBound(ptr<OpenGL>& gl, BoundType bound);
+  void displayBound(ptr<rai::OpenGL>& gl, BoundType bound);
 };
 
 inline ostream& operator<<(ostream& os, const LGP_Node& n) { n.write(os); return os; }

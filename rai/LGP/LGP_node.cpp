@@ -504,7 +504,7 @@ void LGP_Node::getGraph(Graph& G, Node* n, bool brief) {
   for(LGP_Node* ch:children) ch->getGraph(G, n, brief);
 }
 
-void LGP_Node::displayBound(ptr<OpenGL>& gl, BoundType bound) {
+void LGP_Node::displayBound(ptr<rai::OpenGL>& gl, BoundType bound) {
   rai::ConfigurationViewer V;
 //  V.gl = gl;
 

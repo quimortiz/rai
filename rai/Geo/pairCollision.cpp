@@ -26,6 +26,8 @@ extern "C" {
 #  define FCLmode
 #endif
 
+namespace rai {
+
 PairCollision::PairCollision(const rai::Mesh& _mesh1, const rai::Mesh& _mesh2, const rai::Transformation& _t1, const rai::Transformation& _t2, double rad1, double rad2)
   : mesh1(&_mesh1), mesh2(&_mesh2), t1(&_t1), t2(&_t2), rad1(rad1), rad2(rad2) {
 
@@ -767,3 +769,5 @@ double coll_3on3(arr& p1, arr& p2, arr& normal, const arr& pts1, const arr& pts2
   p1.reshape(3);
   return d;
 }
+
+} //namespace

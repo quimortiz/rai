@@ -10,8 +10,8 @@
 #include "../Geo/geo.h"
 #include "kinect2pointCloud.h"
 
-void glDrawSurfels(void* classP, OpenGL&) { ((Surfels*)classP)->glDraw(false); }
-void glDrawSurfelIndices(void* classP, OpenGL&) { ((Surfels*)classP)->glDraw(true); }
+void glDrawSurfels(void* classP, rai::OpenGL&) { ((Surfels*)classP)->glDraw(false); }
+void glDrawSurfelIndices(void* classP, rai::OpenGL&) { ((Surfels*)classP)->glDraw(true); }
 
 void Surfels::setRandom(uint N) {
   pos.resize(N, 3);
@@ -85,7 +85,7 @@ void Surfels::recomputeSurfelIndices() {
   }
 }
 
-void Surfels::pointCloud2Surfels(const arr& pts, const arr& cols, OpenGL& gl) {
+void Surfels::pointCloud2Surfels(const arr& pts, const arr& cols, rai::OpenGL& gl) {
   recomputeSurfelIndices();
   CHECK_EQ(pts.d0, surfelIdx.N, "mismatch in #pixels");
   mx.lock(RAI_HERE);

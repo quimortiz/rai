@@ -11,7 +11,9 @@
 #include <Kin/F_qFeatures.h>
 #include <Kin/viewer.h>
 
-extern bool orsDrawWires;
+namespace rai {
+  extern bool orsDrawWires;
+}
 
 //===========================================================================
 
@@ -28,9 +30,9 @@ void TEST(GJK_Jacobians) {
   C.calc_q_from_Q();
   arr q = C.getJointState();
 
-  orsDrawWires=true;
-  OpenGL gl;
-  gl.add(glStandardScene);
+  rai::orsDrawWires=true;
+  rai::OpenGL gl;
+  gl.add(rai::glStandardScene);
 //  gl.add(draw);
 //  gl.add(K);
 
@@ -93,7 +95,7 @@ void TEST(GJK_Jacobians) {
     cout <<k <<" center  ";
     succ &= checkJacobian(distCenter.vf(C), q, 1e-5);
 
-    PairCollision collInfo(s1.sscCore(), s2.sscCore(), s1.frame.ensure_X(), s2.frame.ensure_X(), s1.size(-1), s2.size(-1));
+    rai::PairCollision collInfo(s1.sscCore(), s2.sscCore(), s1.frame.ensure_X(), s2.frame.ensure_X(), s1.size(-1), s2.size(-1));
 
     //    cout <<"distance: " <<y <<" vec=" <<y2 <<" error=" <<length(y2)-fabs(y(0)) <<endl;
     if(!succ) cout <<collInfo;

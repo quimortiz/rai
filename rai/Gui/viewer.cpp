@@ -10,6 +10,8 @@
 #include "../Gui/opengl.h"
 #include "../Geo/mesh.h"
 
+namespace rai {
+
 //===========================================================================
 //
 // ImageViewer
@@ -355,3 +357,4 @@ void PlotViewer::glDraw(OpenGL&) {
 #endif
 }
 
+} //namespace

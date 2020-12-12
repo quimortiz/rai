@@ -12,11 +12,11 @@
 #include "../Core/thread.h"
 
 /// syncs percepts with modelWorld
-struct SyncFiltered : Thread {
-  Var<PerceptL> percepts;
-  Var<rai::Configuration> kin;
+struct SyncFiltered : rai::Thread {
+  rai::Var<PerceptL> percepts;
+  rai::Var<rai::Configuration> kin;
 
-  SyncFiltered(Var<PerceptL>& _percepts, Var<rai::Configuration>& _kin);
+  SyncFiltered(rai::Var<PerceptL>& _percepts, rai::Var<rai::Configuration>& _kin);
   ~SyncFiltered();
 
   virtual void step();

@@ -36,12 +36,12 @@ struct CtrlObjective {
 //  arr C;             ///< feature space compliance matrix (TODO: needed?)
 
   //-- buffers that store the last evaluation of the feature, andfeature values -- these are always kept up-to-date (in update)
-  ActStatus status;  ///< discrete status based on the reference
+  rai::ActStatus status;  ///< discrete status based on the reference
   arr y_buffer;
 //  arr y, J_y;        ///< update() will evaluate these for a given kinematic configuration
 //  arr f;             ///< measured generalized force in this task space
 
-  CtrlObjective() : type(OT_sos), transientStep(-1.), active(true), /*kp(1.), kd(1.),*/ status(AS_init) {}
+  CtrlObjective() : type(OT_sos), transientStep(-1.), active(true), /*kp(1.), kd(1.),*/ status(rai::AS_init) {}
 //  CtrlObjective(char* _name, const ptr<Feature>& _feat, const ptr<CtrlReference>& _ref, double _kp, double _kd, const arr& _C);
   ~CtrlObjective() {}
 

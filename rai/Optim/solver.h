@@ -10,7 +10,7 @@ enum NLP_SolverID { NLPS_none=-1,
                   };
 
 /** User Interface: Meta class to call several different solvers in a unified manner. */
-struct NLP_Solver : NonCopyable {
+struct NLP_Solver : rai::NonCopyable {
   NLP_SolverID solverID=NLPS_none;
   arr x, dual;
   shared_ptr<MathematicalProgram_Traced> P;

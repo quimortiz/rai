@@ -17,6 +17,8 @@
 #include <condition_variable>
 #include <thread>
 
+namespace rai {
+
 enum ThreadState { tsIsClosed=-6, tsToOpen=-2, tsLOOPING=-3, tsBEATING=-4, tsIDLE=0, tsToStep=1, tsToClose=-1,  tsFAILURE=-5,  }; //positive states indicate steps-to-go
 struct Signaler;
 struct Event;
@@ -470,3 +472,5 @@ int Var<T>::waitForRevisionGreaterThan(int rev) {
 
 template<class T>
 void Var<T>::stopListening() { thread->event.stopListenTo(data); }
+
+} //namespace

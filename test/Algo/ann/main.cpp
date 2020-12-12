@@ -23,7 +23,7 @@ void TEST(ANN) {
   write(LIST<arr>(X),"z.data");
   write(LIST<arr>(x.reshape(1,x.N)),"z.query");
   write(LIST<arr>(Y),"z.neighbors");
-  gnuplot("set size square; plot 'z.data' w p,'z.query' w p,'z.neighbors' w p");
+  rai::gnuplot("set size square; plot 'z.data' w p,'z.query' w p,'z.neighbors' w p");
   rai::wait();
 }
 

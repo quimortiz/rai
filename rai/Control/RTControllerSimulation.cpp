@@ -94,7 +94,7 @@ void RTControlStep(
   if(cmd.Ki.N==1) {
     I_term += Kp_base % (cmd.Ki.scalar() *0.01 * (cmd.q - q));
     //limits: [q_lo, q_hi, vel_limit, u_limit, int_limit]
-    for(uint i=0; i<q.N; i++) clip(I_term(i), -cmd.intLimitRatio*limits(i, 4), cmd.intLimitRatio*limits(i, 4));
+    for(uint i=0; i<q.N; i++) rai::clip(I_term(i), -cmd.intLimitRatio*limits(i, 4), cmd.intLimitRatio*limits(i, 4));
     u += I_term;
   }
 
@@ -144,7 +144,7 @@ void RTControlStep(
 
 }
 
-RTControllerSimulation::RTControllerSimulation(const rai::Configuration& realWorld, const Var<CtrlMsg>& _ctrl_ref, const Var<CtrlMsg>& _ctrl_obs, double tau, bool gravity, double _systematicErrorSdv)
+RTControllerSimulation::RTControllerSimulation(const rai::Configuration& realWorld, const rai::Var<CtrlMsg>& _ctrl_ref, const rai::Var<CtrlMsg>& _ctrl_obs, double tau, bool gravity, double _systematicErrorSdv)
   : Thread("DynmSim", -1.)
   , ctrl_ref(this, _ctrl_ref, true)
   , ctrl_obs(this, _ctrl_obs)

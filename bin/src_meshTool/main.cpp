@@ -12,10 +12,10 @@ Usage:  meshTools file.[tri|obj|off|ply|stl|dea] <tags...>\n\
 \n\
 Tags can be -view, -box, -fuse, -clean, -center, -scale, -save, -qhull, -flip \n";
 
-void drawInit(void*, OpenGL& gl){
-  glStandardLight(nullptr, gl);
-  glDrawAxes(1.);
-  glColor(1.,.5,0.);
+void drawInit(void*, rai::OpenGL& gl){
+  rai::glStandardLight(nullptr, gl);
+  rai::glDrawAxes(1.);
+  rai::glColor(1.,.5,0.);
 }
 
 void TEST(MeshTools) {
@@ -26,7 +26,7 @@ void TEST(MeshTools) {
   else HALT("the first argument needs to be a mesh file");
 
   cout <<"FILE=" <<file <<endl;
-  OpenGL *gl=nullptr;
+  rai::OpenGL *gl=nullptr;
 
   rai::Mesh mesh;
   mesh.readFile(file);
@@ -39,7 +39,7 @@ void TEST(MeshTools) {
   //modify
   if(rai::checkCmdLineTag("view")){
     cout <<"viewing..." <<endl;
-    if(!gl) gl=new OpenGL;
+    if(!gl) gl = new rai::OpenGL;
     gl->clear();
     gl->text = "before operations";
     gl->add(drawInit);
@@ -106,7 +106,7 @@ void TEST(MeshTools) {
 
   if(rai::checkCmdLineTag("view")){
     cout <<"viewing..." <<endl;
-    if(!gl) gl=new OpenGL;
+    if(!gl) gl = new rai::OpenGL;
     gl->clear();
     gl->text = "after operations";
     gl->add(drawInit);

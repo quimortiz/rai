@@ -16,12 +16,12 @@
 
 /// The task controller generates the message send to the RT_Controller
 /// the problem is defined by the list of CtrlObjectives
-struct TaskControlThread : Thread {
+struct TaskControlThread : rai::Thread {
 
-  Var<rai::Configuration> ctrl_config;
-  Var<CtrlMsg> ctrl_ref;
-  Var<CtrlMsg> ctrl_state;
-  Var<CtrlObjectiveL> ctrl_tasks;
+  rai::Var<rai::Configuration> ctrl_config;
+  rai::Var<CtrlMsg> ctrl_ref;
+  rai::Var<CtrlMsg> ctrl_state;
+  rai::Var<CtrlObjectiveL> ctrl_tasks;
 
   arr q_real, qdot_real, torques_real; //< real state
   arr q_model, qdot_model; //< model state
@@ -34,10 +34,10 @@ struct TaskControlThread : Thread {
   bool requiresInitialSync; //< whether the step() should reinit the state from the ros message
   int verbose;
 
-  TaskControlThread(const Var<rai::Configuration>& _ctrl_config,
-                    const Var<CtrlMsg>& _ctrl_ref,
-                    const Var<CtrlMsg>& _ctrl_state,
-                    const Var<CtrlObjectiveL>& _ctrl_tasks);
+  TaskControlThread(const rai::Var<rai::Configuration>& _ctrl_config,
+                    const rai::Var<CtrlMsg>& _ctrl_ref,
+                    const rai::Var<CtrlMsg>& _ctrl_state,
+                    const rai::Var<CtrlObjectiveL>& _ctrl_tasks);
   ~TaskControlThread();
 
   arr whatsTheForce(const ptr<CtrlObjective>& t);
@@ -47,35 +47,35 @@ struct TaskControlThread : Thread {
 
 #if 0 //draft
 struct TaskControlUserInterface {
-  Var<rai::Configuration> ctrl_config;
-  Var<CtrlObjectiveL> ctrl_tasks;
+  rai::Var<rai::Configuration> ctrl_config;
+  rai::Var<CtrlObjectiveL> ctrl_tasks;
 
-  TaskControlUserInterface(const Var<rai::Configuration>& _ctrl_config, const Var<CtrlObjectiveL>& _ctrl_tasks);
+  TaskControlUserInterface(const rai::Var<rai::Configuration>& _ctrl_config, const rai::Var<CtrlObjectiveL>& _ctrl_tasks);
 
   //add your wish function
 };
 
 #endif
 
-ptr<CtrlObjective> addCtrlObjective(Var<CtrlObjectiveL>& ctrlTasks,
-                                    Var<rai::Configuration>& ctrl_config,
+ptr<CtrlObjective> addCtrlObjective(rai::Var<CtrlObjectiveL>& ctrlTasks,
+                                    rai::Var<rai::Configuration>& ctrl_config,
                                     const char* name, const ptr<Feature>& map,
                                     const ptr<CtrlMovingTarget>& ref);
 
-ptr<CtrlObjective> addCtrlObjective(Var<CtrlObjectiveL>& ctrlTasks,
-                                    Var<rai::Configuration>& ctrl_config,
+ptr<CtrlObjective> addCtrlObjective(rai::Var<CtrlObjectiveL>& ctrlTasks,
+                                    rai::Var<rai::Configuration>& ctrl_config,
                                     const char* name, FeatureSymbol fs, const StringA& frames,
                                     const ptr<CtrlMovingTarget>& ref);
 
-ptr<CtrlObjective> addCtrlObjective(Var<CtrlObjectiveL>& ctrlTasks,
-                                    Var<rai::Configuration>& ctrl_config,
+ptr<CtrlObjective> addCtrlObjective(rai::Var<CtrlObjectiveL>& ctrlTasks,
+                                    rai::Var<rai::Configuration>& ctrl_config,
                                     const char* name, FeatureSymbol fs, const StringA& frames,
                                     double duration);
 
-ptr<CtrlObjective> addCompliance(Var<CtrlObjectiveL>& ctrlTasks,
-                                 Var<rai::Configuration>& ctrl_config,
+ptr<CtrlObjective> addCompliance(rai::Var<CtrlObjectiveL>& ctrlTasks,
+                                 rai::Var<rai::Configuration>& ctrl_config,
                                  const char* name, FeatureSymbol fs, const StringA& frames,
                                  const arr& compliance);
 
-void removeCtrlObjective(Var<CtrlObjectiveL>& ctrlTasks, CtrlObjective* t);
+void removeCtrlObjective(rai::Var<CtrlObjectiveL>& ctrlTasks, CtrlObjective* t);
 

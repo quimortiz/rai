@@ -25,7 +25,7 @@ int main(int argc,char **argv){
   //-- load configuration
   rai::Configuration C;
   for(;;){
-    Inotify ino(file);
+    rai::Inotify ino(file);
     try {
       rai::lineCount=1;
       C.clear();

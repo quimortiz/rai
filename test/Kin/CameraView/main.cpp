@@ -16,14 +16,14 @@ void TEST(CameraView){
   V.addSensor("kinect", "endeffKinect", 640, 480, 580./480., -1., {.1, 50.} );
 //  V.selectSensor("kinect");
 
-  Var<byteA> image;
-  Var<floatA> depth;
-  Var<byteA> segmentation;
-  Var<arr> pts;
+  rai::Var<byteA> image;
+  rai::Var<floatA> depth;
+  rai::Var<byteA> segmentation;
+  rai::Var<arr> pts;
 
-  PointCloudViewerCallback v(pts, image);
-  ImageViewerCallback v2(image);
-  ImageViewerCallback v3(segmentation);
+  rai::PointCloudViewerCallback v(pts, image);
+  rai::ImageViewerCallback v2(image);
+  rai::ImageViewerCallback v3(segmentation);
 
   V.computeImageAndDepth(image.set(), depth.set());
   V.computeSegmentation(segmentation.set());

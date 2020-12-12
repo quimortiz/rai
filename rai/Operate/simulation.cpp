@@ -25,10 +25,10 @@ struct Sensor {
 struct Simulation_self {
   rai::Array<Sensor> sensors;
 
-  Mutex threadLock;
+  rai::Mutex threadLock;
 
   rai::Configuration K_compute;
-  OpenGL gl;
+  rai::OpenGL gl;
 
   uintA currentlyUsedJoints; //the joints that the spline refers to
   SplineRunner spline;
@@ -44,7 +44,7 @@ Simulation::Simulation(const rai::Configuration& _K, double dt)
 
   self->gl.title = "Simulation";
   self->gl.camera.setDefault();
-  self->gl.add(glStandardScene);
+  self->gl.add(rai::glStandardScene);
   self->gl.add(K);
 //  self->gl.update();
 
@@ -286,13 +286,13 @@ StringA Simulation::getObjectNames() {
   return objs;
 }
 
-void Simulation::glDraw(OpenGL& gl) {
-  glStandardLight(nullptr, gl);
+void Simulation::glDraw(rai::OpenGL& gl) {
+  rai::glStandardLight(nullptr, gl);
   //  glEnable(GL_LIGHTING);
 
   for(Sensor& sen:self->sensors) {
-    glDrawCamera(sen.cam);
-    glDrawText(STRING("SENSOR " <<sen.name), 0., 0., 0.);
+    rai::glDrawCamera(sen.cam);
+    rai::glDrawText(STRING("SENSOR " <<sen.name), 0., 0., 0.);
   }
 }
 

@@ -3,10 +3,10 @@
 //===========================================================================
 
 // Normal Thread struct
-struct MyThread: Thread{
-  Var<double> x;
+struct MyThread : rai::Thread{
+  rai::Var<double> x;
   uint n;
-  MyThread(Var<double>& _x, uint n, double beat)
+  MyThread(rai::Var<double>& _x, uint n, double beat)
     : Thread(STRING("MyThread_"<<n), beat), x(this, _x), n(n){
     threadOpen();
   }
@@ -17,7 +17,7 @@ struct MyThread: Thread{
 };
 
 void TEST(Thread){
-  Var<double> x;
+  rai::Var<double> x;
   x.set() = 0.;
   MyThread t1(x, 1, .5), t2(x, 2, -1);
 
@@ -41,12 +41,12 @@ struct MyType{
   int i;
 };
 
-struct ComputeSum : Thread {
-  Var<arr> x;    //input
-  Var<double> s; //output
-  Var<MyType> i;
+struct ComputeSum : rai::Thread {
+  rai::Var<arr> x;    //input
+  rai::Var<double> s; //output
+  rai::Var<MyType> i;
 
-  ComputeSum():Thread("ComputeSum"){}
+  ComputeSum() : Thread("ComputeSum"){}
   virtual ~ComputeSum(){ threadClose(); }
 
   void step(){
@@ -75,8 +75,8 @@ void TEST(Way0){
 void TEST(Way1){
   auto m = make_shared<ComputeSum>();
 
-  Var<arr> x(m->x);
-  Var<double> s(m->s);
+  rai::Var<arr> x(m->x);
+  rai::Var<double> s(m->s);
 
   x.set() = {1., 2., 3.};
 
@@ -99,10 +99,10 @@ void TEST(Way1){
 // test with a pair-wise distributed sorter
 //
 
-struct PairSorter:Thread{
-  Var<int> a;
-  Var<int> b;
-  PairSorter(Var<int>& _a, Var<int>& _b)
+struct PairSorter : rai::Thread{
+  rai::Var<int> a;
+  rai::Var<int> b;
+  PairSorter(rai::Var<int>& _a, rai::Var<int>& _b)
     : Thread(STRING("S_"<<_a.name()<<"_"<<_b.name())),
       a(this, _a),
       b(this, _b){}
@@ -117,7 +117,7 @@ struct PairSorter:Thread{
 void TEST(Sorter){
   uint N=20;
 
-  rai::Array<Var<int>> x(N);
+  rai::Array<rai::Var<int>> x(N);
   rai::Array<ptr<PairSorter>> ps(N-1);
   for(uint i=0;i<N-1;i++)
     ps(i) = make_shared<PairSorter>(x(i), x(i+1));
@@ -165,7 +165,7 @@ void PairSorter::step(){
 //
 
 // Normal Thread struct
-struct MyLogThread: Thread{
+struct MyLogThread : rai::Thread{
   uint n;
   MyLogThread(uint n, double beatIntervalSec=0.):Thread(STRING("MyThread_"<<n), beatIntervalSec), n(n){}
   void open(){}

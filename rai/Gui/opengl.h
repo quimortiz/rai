@@ -40,10 +40,10 @@
 #undef Success
 
 namespace rai {
+
 struct Vector;
 struct Quaternion;
 struct Transformation;
-}
 
 //===========================================================================
 //
@@ -277,3 +277,5 @@ struct glUI:OpenGL::GLHoverCall, OpenGL::GLClickCall {
 void glDrawUI(void* p, OpenGL&);
 
 extern OpenGL& NoOpenGL;
+
+} //namespace

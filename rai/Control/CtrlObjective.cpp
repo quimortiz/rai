@@ -34,7 +34,7 @@ arr CtrlObjective::getValue(CtrlSolver& cp) {
   return y;
 }
 
-void CtrlObjective::resetState() { if(movingTarget) movingTarget->resetState(); status=AS_init; }
+void CtrlObjective::resetState() { if(movingTarget) movingTarget->resetState(); status=rai::AS_init; }
 
 //arr CtrlObjective::update_y(const ConfigurationL& Ctuple) {
 //  arr y_old = y;
@@ -55,7 +55,7 @@ void CtrlObjective::setTarget(const arr& y_target) {
     movingTarget->resetGoal(y_target);
     movingTarget->resetState();
   }
-  status = AS_init;
+  status = rai::AS_init;
 }
 
 void CtrlObjective::setTimeScale(double d) { CHECK(movingTarget, ""); movingTarget->setTimeScale(d); movingTarget->resetState(); }
@@ -63,7 +63,7 @@ void CtrlObjective::setTimeScale(double d) { CHECK(movingTarget, ""); movingTarg
 void CtrlObjective::reportState(ostream& os) const {
   os <<"  CtrlObjective " <<name <<':';
   if(!active) cout <<" INACTIVE";
-  cout <<rai::Enum<ActStatus>(status) <<' ';
+  cout <<rai::Enum<rai::ActStatus>(status) <<' ';
   if(movingTarget) {
     os <<" -- moving target:" <<feat->target <<' ';
     movingTarget->reportState(os);

@@ -29,10 +29,10 @@ namespace ry {
 
 struct RyCameraView {
   ptr<rai::CameraView> cam;
-  Var<byteA> image;
-  Var<floatA> depth;
-  Var<byteA> segmentation;
-  Var<arr> pts;
+  rai::Var<byteA> image;
+  rai::Var<floatA> depth;
+  rai::Var<byteA> segmentation;
+  rai::Var<arr> pts;
 };
 
 }

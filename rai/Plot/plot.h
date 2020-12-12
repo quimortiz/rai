@@ -10,11 +10,13 @@
 
 #include "../Core/util.h"
 
+namespace rai{
+
 //===========================================================================
 
 struct OpenGL;
 struct Gaussian;
-namespace rai {  template<class T> struct Array;  }
+ template<class T> struct Array;
 
 typedef unsigned int uint;
 typedef rai::Array<double> arr;
@@ -26,8 +28,6 @@ typedef rai::Array<Gaussian*> GaussianL;
 //===========================================================================
 
 typedef enum { opengl, xfig, gnupl } PlotMode;
-
-namespace rai {
 
 struct PlotModule : GLDrawer {
   unique_ptr<struct sPlotModule> self;
@@ -69,8 +69,8 @@ struct PlotModule : GLDrawer {
   void glDraw(OpenGL& gl);
 };
 
-}
-
 extern Singleton<rai::PlotModule> plot;
+
+} //namespace
 
 //===========================================================================

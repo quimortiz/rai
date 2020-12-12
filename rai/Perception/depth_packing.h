@@ -10,10 +10,10 @@
 
 #include "../Core/thread.h"
 
-struct KinectDepthPacking : Thread {
-  Var<uint16A> kinect_depth;
-  Var<byteA> kinect_depthRgb;
-  KinectDepthPacking() : Thread("KinectDepthPacking"), kinect_depth(this, true) {}
+struct KinectDepthPacking : rai::Thread {
+  rai::Var<uint16A> kinect_depth;
+  rai::Var<byteA> kinect_depthRgb;
+  KinectDepthPacking() : rai::Thread("KinectDepthPacking"), kinect_depth(this, true) {}
   void open();
   void step();
   void close();

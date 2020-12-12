@@ -12,9 +12,9 @@
 #include "feature.h"
 #include "../Core/util.h"
 
-struct PairCollision;
-
 namespace rai {
+
+struct PairCollision;
 
 //===========================================================================
 

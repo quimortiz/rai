@@ -13,7 +13,7 @@
 #include "../Geo/mesh.h"
 #include "../Algo/dataNeighbored.h"
 
-struct MinEigModel : GLDrawer {
+struct MinEigModel : rai::GLDrawer {
   DataNeighbored& data;
   arr weights;
   double margin;
@@ -54,7 +54,7 @@ struct MinEigModel : GLDrawer {
   double coveredData(bool novelDataOnly=true);
   void calcDensity();
   void colorPixelsWithWeights(arr& cols);
-  void glDraw(OpenGL&);
+  void glDraw(rai::OpenGL&);
   void report(ostream& os=std::cout, bool mini=false);
 
  private:

@@ -20,6 +20,7 @@
 //===========================================================================
 
 namespace rai {
+  struct OpenGL;
   struct FclInterface;
 }
 
@@ -106,7 +107,7 @@ enum KOMOsolver { KS_none=-1, KS_dense=0, KS_sparse, KS_banded, KS_sparseFactore
 
 //===========================================================================
 
-struct KOMO : NonCopyable {
+struct KOMO : rai::NonCopyable {
 
   //-- the problem definition
   uint stepsPerPhase=0;        ///< time slices per phase
@@ -123,7 +124,7 @@ struct KOMO : NonCopyable {
   FrameL timeSlices;              ///< the original timeSlices of the pathConfig (when switches add frames, pathConfig.frames might differ from timeSlices - otherwise not)
   bool computeCollisions;         ///< whether swift or fcl (collisions/proxies) is evaluated whenever new configurations are set (needed if features read proxy list)
   shared_ptr<rai::FclInterface> fcl;
-  shared_ptr<SwiftInterface> swift;
+  shared_ptr<rai::SwiftInterface> swift;
 
   //-- experimental!
   bool switchesWereApplied = false; //TODO: apply them directly? Would only work when no frames were added?
@@ -139,7 +140,7 @@ struct KOMO : NonCopyable {
   arrA featureJacobians;       ///< storage of all features in all time slices
   ObjectiveTypeA featureTypes; ///< storage of all feature-types in all time slices
   StringA featureNames;
-  ptr<struct OpenGL> gl;       ///< TODO: remove (use pathConfig.gl() only) internal only: used in 'displayTrajectory'
+  ptr<rai::OpenGL> gl;       ///< TODO: remove (use pathConfig.gl() only) internal only: used in 'displayTrajectory'
   int verbose;                 ///< verbosity level
   int animateOptimization=0;   ///< display the current path for each evaluation during optimization
   double runTime=0.;           ///< measured run time

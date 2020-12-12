@@ -12,9 +12,9 @@ using namespace std;
 
 /************ first test ************/
 
-void draw1(void*,OpenGL& gl){
-  glStandardLight(nullptr, gl);
-  glColor(1,0,0);
+void draw1(void*, rai::OpenGL& gl){
+  rai::glStandardLight(nullptr, gl);
+  rai::glColor(1,0,0);
   glFrontFace(GL_CW);
   glutSolidTeapot(1.);
 //  glDrawBox(1,.7,.5);
@@ -22,7 +22,7 @@ void draw1(void*,OpenGL& gl){
 }
 
 void TEST(Teapot) {
-  OpenGL gl;
+  rai::OpenGL gl;
   gl.reportEvents = true;
   gl.add(draw1,0);
   gl.watch();
@@ -36,7 +36,7 @@ void TEST(Teapot) {
 void TEST(MultipleViews) {
   byteA img;
   read_ppm(img,"box.ppm",false);
-  OpenGL gl;
+  rai::OpenGL gl;
   gl.reportEvents=true;
   gl.reportSelects=true;
   gl.text <<"multiple views";
@@ -54,7 +54,7 @@ void TEST(MultipleViews) {
 /************ grab test ************/
 
 void TEST(Grab) {
-  OpenGL gl("title",300,300);
+  rai::OpenGL gl("title",300,300);
   gl.add(draw1,0);
   cout <<"normal view - written to z.ppm " <<endl;
   gl.update("title", true);
@@ -77,10 +77,10 @@ void TEST(Grab) {
 
 /************ second test ************/
 
-static void draw2(void*, OpenGL& gl){
-  glStandardLight(nullptr, gl);
-  glDrawAxes(1.);
-  glColor(1.,1.,1.);
+static void draw2(void*, rai::OpenGL& gl){
+  rai::glStandardLight(nullptr, gl);
+  rai::glDrawAxes(1.);
+  rai::glColor(1.,1.,1.);
   glDisable(GL_CULL_FACE);
 }
 
@@ -112,7 +112,7 @@ void TEST(Mesh) {
   mesh.deleteUnusedVertices();
 
   //draw
-  OpenGL gl;
+  rai::OpenGL gl;
   gl.text="testing Mesh";
   gl.add(draw2,0);
   gl.add(mesh);
@@ -125,7 +125,7 @@ void TEST(Obj) {
   rai::Mesh mesh,mesh2;
 
   //mesh.readObjFile(FILE("../../external/3dmodel/obj/gipshand2-273k.obj"));
-  mesh.readObjFile(FILE("base-male-nude.obj"));
+  mesh.readFile("base-male-nude.obj");
   //mesh.readObjFile(FILE("../../../3dmodel/obj/gipshand2-273k.obj"));
   //mesh.readObjFile(FILE("../../../3dmodel/obj/base-male-nude.obj"));
   mesh.scale(.1,.1,.1);
@@ -133,7 +133,7 @@ void TEST(Obj) {
 //  mesh2.readObjFile(FILE("magnolia.obj"));
 //  mesh2.scale(.01,.01,.01);
 //  mesh2.computeNormals();
-  OpenGL gl;
+  rai::OpenGL gl;
   gl.text="testing Mesh";
   gl.add(draw2,0);
   gl.add(mesh);
@@ -160,7 +160,7 @@ void menuCallback3(int i){
 
 void TEST(Menu){
 #if 0
-  OpenGL gl;
+  rai::OpenGL gl;
   gl.text.clear() <<"press the right moust";
   gl.add(draw1,0);
 
@@ -189,8 +189,8 @@ void TEST(Menu){
 
 byteA texImg;
 //static GLuint texName;
-void draw5(void*, OpenGL& gl){
-  glStandardScene(nullptr, gl);
+void draw5(void*, rai::OpenGL& gl){
+  rai::glStandardScene(nullptr, gl);
 
 #if 1
   glDisable(GL_CULL_FACE);
@@ -294,7 +294,7 @@ void read_png(byteA &img, const char *file_name, bool swap_rows) {
 #endif
 
 void TEST(Texture) {
-  OpenGL gl;
+  rai::OpenGL gl;
   read_ppm(texImg, "box.ppm", false);
   //  read_png(texImg, "box.png", false);
 //  remove_alpha_channel(texImg);
@@ -308,11 +308,11 @@ void TEST(Texture) {
 //===========================================================================
 
 void TEST(Texture2) {
-  OpenGL gl;
+  rai::OpenGL gl;
   rai::Mesh m;
   m.readFile("owl.obj");
   read_png(m.texImg, "owl.png", true);
-  gl.add(glStandardLight);
+  gl.add(rai::glStandardLight);
   gl.add(m);
   gl.watch();
 }
@@ -320,28 +320,28 @@ void TEST(Texture2) {
 //===========================================================================
 
 void TEST(OfflineRendering){
-  OpenGL gl("view", 40, 40, true);
+  rai::OpenGL gl("view", 40, 40, true);
   gl.add(draw1,0);
   gl.update(nullptr, true);
 //  gl.renderInBack(200, 200);
   write_ppm(gl.captureImage,"z.ppm");
-//  OpenGL gl2("captured", gl.captureImage.d1, gl.captureImage.d0);
+//  rai::OpenGL gl2("captured", gl.captureImage.d1, gl.captureImage.d0);
 //  gl2.watchImage(gl.captureImage, true, 1);
   cout <<"returned from watch - watch again" <<endl;
 }
 
 /************ test clicking on and identifying objects in the scene ************/
 
-void draw3(void*, OpenGL& gl){
+void draw3(void*, rai::OpenGL& gl){
   glPushName(0xa0);
-  glStandardLight(nullptr, gl);
-  glColor(1,0,0);
+  rai::glStandardLight(nullptr, gl);
+  rai::glColor(1,0,0);
   glutSolidTeapot(1.);
   glPopName();
 }
 
 void TEST(Select) {
-  OpenGL gl;
+  rai::OpenGL gl;
   gl.add(draw3,0);
   gl.text <<"hover over objects and read cout...";
   //gl.selectOnHover=true;
@@ -353,11 +353,11 @@ void TEST(Select) {
 /************ test clicking on and identifying objects in the scene ************/
 
 void TEST(UI){
-  OpenGL gl;
-  glUI ui;
+  rai::OpenGL gl;
+  rai::glUI ui;
   gl.reportEvents=true;
   gl.add(draw1,0);
-  gl.add(glDrawUI,&ui);
+  gl.add(rai::glDrawUI,&ui);
   gl.addHoverCall(&ui);
   gl.addClickCall(&ui);
   ui.addButton(100,100,"OK, this is it!");
@@ -365,7 +365,7 @@ void TEST(UI){
 }
 
 void TEST(Image) {
-  OpenGL gl;
+  rai::OpenGL gl;
   byteA img;
   read_ppm(img,"box.ppm",false);
   gl.watchImage(img,true,2);

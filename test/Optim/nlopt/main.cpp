@@ -31,7 +31,7 @@ void TEST(NLOpt){
   if(x.N==2){
     displayFunction(opt.L);
     rai::wait();
-    gnuplot("load 'plt'");
+    rai::gnuplot("load 'plt'");
     rai::wait();
   }
 

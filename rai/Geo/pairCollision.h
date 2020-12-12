@@ -10,7 +10,9 @@
 
 #include "mesh.h"
 
-struct PairCollision : GLDrawer, NonCopyable {
+namespace rai {
+
+struct PairCollision : rai::GLDrawer, rai::NonCopyable {
   //INPUTS
   const rai::Mesh* mesh1=0;
   const rai::Mesh* mesh2=0;
@@ -79,3 +81,5 @@ double coll_2on3(arr& p1, arr& p2, arr& normal, const arr& pts1, const arr& pts2
 double coll_3on3(arr& p1, arr& p2, arr& normal, const arr& pts1, const arr& pts2, const arr& center);
 
 stdOutPipe(PairCollision)
+
+} //namespace

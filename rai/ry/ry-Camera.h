@@ -17,8 +17,8 @@ struct RosCamera;
 namespace ry {
 
 struct RyCamera {
-  Var<byteA> rgb;
-  Var<floatA> depth;
+  rai::Var<byteA> rgb;
+  rai::Var<floatA> depth;
   std::shared_ptr<RosCamera> C;
   RyCamera(const char* rosNodeName,
            const char* rgb_topic,

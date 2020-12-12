@@ -16,6 +16,8 @@
 #include <assimp/Exporter.hpp>
 #include <assimp/postprocess.h>
 
+namespace rai {
+
 bool loadTextures = true;
 
 AssimpLoader::AssimpLoader(const std::string& path, bool flipYZ, bool relativeMeshPoses) {
@@ -237,3 +239,5 @@ void writeAssimp(const rai::Mesh& M, const char* filename, const char* format){
   Assimp::Exporter exporter;
   exporter.Export(&scene, format, filename);
 }
+
+} //namespace

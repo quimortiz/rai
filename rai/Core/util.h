@@ -85,6 +85,8 @@ using std::make_shared;
 //
 
 namespace rai {
+  struct Rnd;
+  struct LogObject;
 extern int argc;
 extern char** argv;
 extern bool IOraw;  ///< stream modifier for some classes (Mem in particular)
@@ -194,6 +196,13 @@ bool getDisableGui();
 struct PARSE { const char* str; PARSE(const char* _str):str(_str) {} };
 std::istream& operator>>(std::istream& is, const PARSE&);
 
+extern rai::Rnd rnd;
+
+extern rai::LogObject _log;
+
+
+namespace rai {
+
 //===========================================================================
 //
 // String class
@@ -203,7 +212,6 @@ std::istream& operator>>(std::istream& is, const PARSE&);
 #define STRINGF(format,...) (rai::String().printf(format, __VA_ARGS__))
 #define STREAM(x) (((rai::String&)(rai::String().stream() <<x)).stream())
 
-namespace rai {
 /** @brief String implements the functionalities of an ostream and an
 istream, but also can be send to an ostream or read from an
 istream. It is based on a simple streambuf derived from the
@@ -282,16 +290,21 @@ struct String : public std::iostream {
   uint read(std::istream& is, const char* skipSymbols=nullptr, const char* stopSymbols=nullptr, int eatStopSymbol=-1);
 };
 stdPipes(String)
-}
 
-inline rai::String operator+(const rai::String& a, const char* b) { rai::String s=a; s <<b; return s; }
+inline String operator+(const String& a, const char* b) { String s=a; s <<b; return s; }
+
+//===========================================================================
+//
+// string-filling routines
+//
+
+String getNowString();  //TODO:compare with getDate2
 
 //===========================================================================
 //
 // logging
 //
 
-namespace rai {
 /// An object that represents a log file and/or cout logging, together with log levels read from a cfg file
 struct LogObject {
   std::ofstream fil;
@@ -315,9 +328,6 @@ struct LogToken {
   ~LogToken(); //that's where the magic happens!
   std::ostream& os() { return msg; }
 };
-}
-
-extern rai::LogObject _log;
 
 #define LOG(log_level) _log.getNonConst().getToken(log_level, __FILE__, __func__, __LINE__).os()
 
@@ -339,9 +349,7 @@ void setLogLevels(int fileLogLevel=3, int consoleLogLevel=2);
 #define RAI_HERE __FILE__ ":" S2(__LINE__)
 //#define RAI_HERE __FILE__ ## ":" ## #__FUNCTION__ ## ":" ## #__LINE__
 
-namespace rai {
 extern String errString;
-}
 
 #ifndef HALT
 #  define RAI_MSG(msg){ LOG(-1) <<msg; }
@@ -405,8 +413,6 @@ extern String errString;
 // FileToken
 //
 
-namespace rai {
-
 String raiPath(const char* rel=nullptr);
 
 /** @brief A ostream/istream wrapper that allows easier initialization of objects, like:
@@ -442,7 +448,7 @@ inline std::ostream& operator<<(std::ostream& os, const FileToken& fil) { return
 template<class T> FileToken& operator<<(T& x, FileToken& fil) { fil.getIs() >>x; return fil; }
 template<class T> void operator>>(const T& x, FileToken& fil) { fil.getOs() <<x; }
 inline bool operator==(const FileToken&, const FileToken&) { return false; }
-}
+
 #define FILE(filename) (rai::FileToken(filename, false)()) //it needs to return a REFERENCE to a local scope object
 
 //===========================================================================
@@ -450,7 +456,6 @@ inline bool operator==(const FileToken&, const FileToken&) { return false; }
 // give names to Enum (for pipe << >> )
 //
 
-namespace rai {
 template<class enum_T>
 struct Enum {
   enum_T x;
@@ -500,19 +505,18 @@ struct Enum {
 };
 template<class T> std::istream& operator>>(std::istream& is, Enum<T>& x) { x.read(is); return is; }
 template<class T> std::ostream& operator<<(std::ostream& os, const Enum<T>& x) { x.write(os); return os; }
-}
+
 
 //===========================================================================
 //
 // random number generator
 //
 
-namespace rai {
 /** @brief A random number generator. An global instantiation \c
   rai::rnd of a \c Rnd object is created. Use this one object to get
   random numbers.*/
 class Rnd {
- private:
+private:
   bool ready;
   int32_t rpoint;     /* Feldindex    */
   int32_t rfield[256];   /* Schieberegisterfeld  */
@@ -565,9 +569,6 @@ class Rnd {
   void seed250(int32_t seed);
 };
 
-}
-/// The global Rnd object
-extern rai::Rnd rnd;
 
 //===========================================================================
 //
@@ -583,6 +584,7 @@ struct Inotify {
   ~Inotify();
   bool poll(bool block=false, bool verbose=false);
 };
+
 
 //===========================================================================
 //
@@ -611,6 +613,7 @@ struct Mutex {
   };
   template<class T> TypedToken<T> operator()(T* data, const char* _lockInfo) { return TypedToken<T>(*this, data, _lockInfo); }
 };
+
 
 //===========================================================================
 //
@@ -671,17 +674,16 @@ struct CoutToken {
   ~CoutToken() { coutMutex.unlock(); }
   std::ostream& getOs() { return std::cout; }
 };
-#define COUT (CoutToken().getOs())
+#define COUT (rai::CoutToken().getOs())
+
 
 //===========================================================================
 //
 // to register a type
 //
 
-namespace rai {
 struct Node;
 struct Graph;
-}
 
 struct Type {
   virtual ~Type() {}
@@ -704,14 +706,6 @@ inline bool operator==(Type& t1, Type& t2) { return t1.typeId() == t2.typeId(); 
 
 //===========================================================================
 //
-/// running code on init (in cpp files)
-//
-
-#define RUN_ON_INIT_BEGIN(key) struct key##_RUN_ON_INIT{ key##_RUN_ON_INIT(){
-#define RUN_ON_INIT_END(key)   } } key##_RUN_ON_INIT_dummy;
-
-//===========================================================================
-//
 // gnuplot calls
 //
 
@@ -730,3 +724,14 @@ template <typename T> T clip(T& x, const T& lower, const T& upper) {
 
 std::string getcwd_string();
 const char* niceTypeidName(const std::type_info& type);
+
+} //namespace
+
+//===========================================================================
+//
+/// running code on init (in cpp files)
+//
+
+#define RUN_ON_INIT_BEGIN(key) struct key##_RUN_ON_INIT{ key##_RUN_ON_INIT(){
+#define RUN_ON_INIT_END(key)   } } key##_RUN_ON_INIT_dummy;
+

@@ -113,7 +113,7 @@ void SimulationThread::step() {
 
 void SimulationThread::loop() {
   //loop
-  Metronome tictac(dt);
+  rai::Metronome tictac(dt);
   for(;;) {
     tictac.waitForTic();
     step();

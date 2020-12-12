@@ -13,7 +13,7 @@ void TEST(Ipopt){
     IpoptInterface ipo(P);
     ipo.solve();
     ofstream fil2("z.opt2");
-    ipo.P.xLog.writeRaw(fil2);
+//    ipo.P.xLog.writeRaw(fil2);
   }
 
   arr x, phi;
@@ -32,7 +32,7 @@ void TEST(Ipopt){
   if(x.N==2){
     displayFunction(opt.L);
     rai::wait();
-    gnuplot("load 'plt'");
+    rai::gnuplot("load 'plt'");
     rai::wait();
   }
 

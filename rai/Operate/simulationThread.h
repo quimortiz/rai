@@ -11,7 +11,7 @@
 #include "simulation.h"
 #include "robotio.h"
 
-struct SimulationThread : Thread, RobotAbstraction {
+struct SimulationThread : rai::Thread, RobotAbstraction {
 
   Simulation SIM;
   double dt;

@@ -37,7 +37,7 @@ void testMinimal(){
     ctrl.report();
     C.watch(false, STRING("t:" <<t));
     rai::wait(.01);
-    if(pos->status>AS_running) break;
+    if(pos->status>rai::AS_running) break;
 //    if(CS.isConverged(ctrl.komo.pathConfig)) break;
   }
 }

@@ -16,11 +16,11 @@
 bool baxter_get_q_qdot_u(arr& q, arr& q_dot, arr& u, const sensor_msgs::JointState& msg, const rai::Configuration& baxterModel);
 #endif
 
-struct SendPositionCommandsToBaxter : Thread {
-  Var<CtrlMsg> ctrl_ref;
+struct SendPositionCommandsToBaxter : rai::Thread {
+  rai::Var<CtrlMsg> ctrl_ref;
   unique_ptr<struct sBaxterInterface> self;
 
-  SendPositionCommandsToBaxter(const rai::Configuration& baxterWorld, const Var<CtrlMsg>& _ctrl_ref);
+  SendPositionCommandsToBaxter(const rai::Configuration& baxterWorld, const rai::Var<CtrlMsg>& _ctrl_ref);
 
   void open();
   void step();

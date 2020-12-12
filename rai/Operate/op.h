@@ -12,21 +12,21 @@
 typedef std::function<int()> Script;
 
 struct Act {
-  Var<ActStatus> status;
+  rai::Var<rai::ActStatus> status;
   double startTime;
 
   Act() : startTime(rai::realTime()) {
-    status.set()=AS_init;
+    status.set()=rai::AS_init;
   }
   virtual ~Act() {}
 
   double time() { return rai::realTime()-startTime; }
-  virtual void write(ostream& os) { os <<'<' <<std::setw(14) <<niceTypeidName(typeid(*this)) <<"> @" <<std::setw(12) <<rai::Enum<ActStatus>(status()) <<std::setw(5) <<std::setprecision(3)<<time() <<"s -- "; }
+  virtual void write(ostream& os) { os <<'<' <<std::setw(14) <<rai::niceTypeidName(typeid(*this)) <<"> @" <<std::setw(12) <<rai::Enum<rai::ActStatus>(status()) <<std::setw(5) <<std::setprecision(3)<<time() <<"s -- "; }
 
   typedef std::shared_ptr<Act> Ptr;
 };
 
-struct Act_Script : Act, Thread {
+struct Act_Script : Act, rai::Thread {
   Script script;
   Act_Script(const Script& S, double beatIntervalSec=-1.)
     :  Thread("Act_Script", beatIntervalSec), script(S) {
@@ -37,11 +37,11 @@ struct Act_Script : Act, Thread {
   ~Act_Script() { threadClose(); }
 
   virtual void open() {}
-  virtual void step() { ActStatus r = (ActStatus)script(); status.set()=r; }
+  virtual void step() { rai::ActStatus r = (rai::ActStatus)script(); status.set()=r; }
   virtual void close() {}
 };
 
-template<class T> struct Act_LoopStep : Act, Thread {
+template<class T> struct Act_LoopStep : Act, rai::Thread {
   ptr<T> script;
   Act_LoopStep(const ptr<T>& S, double beatIntervalSec=-1.)
     :  Thread("Act_Script", beatIntervalSec), script(S) {
@@ -52,7 +52,7 @@ template<class T> struct Act_LoopStep : Act, Thread {
   ~Act_LoopStep() { threadClose(); }
 
   virtual void open() {}
-  virtual void step() { ActStatus r = (ActStatus)script->step(); status.set()=r; }
+  virtual void step() { rai::ActStatus r = (rai::ActStatus)script->step(); status.set()=r; }
   virtual void close() {}
 };
 

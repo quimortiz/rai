@@ -21,6 +21,8 @@
 #undef min
 #undef max
 
+namespace rai {
+
 ANN* global_ANN=nullptr;
 rai::Shape* global_ANN_shape;
 
@@ -415,6 +417,8 @@ uint SwiftInterface::countObjects() {
 
 #include "../Core/util.h"
 
+namespace rai {
+
 SwiftInterface(const FrameL& frames, double _cutoff=.2, int verbose=0){ NICO }
 ~SwiftInterface(){ NICO }
 
@@ -441,3 +445,5 @@ void SwiftInterface::swiftQueryExactDistance() { NICO }
 uint SwiftInterface::countObjects() { NICO }
 
 #endif
+
+} //namespace

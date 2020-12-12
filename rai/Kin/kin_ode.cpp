@@ -31,6 +31,8 @@
 #define CP4(x, y) memmove(x, y, 4*sizeof(double));
 #define CP3(x, y) memmove(x, y, 3*sizeof(double));
 
+namespace rai {
+
 static bool ODEinitialized=false;
 
 //===========================================================================
@@ -1041,6 +1043,9 @@ bool inFloorContacts(rai::Vector& x);
 #endif
 
 #else
+
+namespace rai {
+
 OdeInterface::OdeInterface(rai::Configuration& _C):C(_C) { RAI_MSG("WARNING - creating dummy OdeInterface"); }
 OdeInterface::~OdeInterface() {}
 void OdeInterface::step(double dtime) {}
@@ -1053,3 +1058,5 @@ void OdeInterface::importProxiesFromOde() {}
 void OdeInterface::addJointForce(arr& f) {}
 void OdeInterface::pushPoseForShape(rai::Shape* s) {};
 #endif
+
+} //namespace

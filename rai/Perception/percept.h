@@ -17,7 +17,7 @@ struct Percept;
 typedef std::shared_ptr<Percept> PerceptPtr;
 typedef rai::Array<PerceptPtr> PerceptL;
 
-struct Percept : GLDrawer {
+struct Percept : rai::GLDrawer {
   enum Type { PT_cluster, PT_plane, PT_box, PT_mesh, PT_alvar, PT_optitrackmarker, PT_optitrackbody, PT_end };
 
   uint id = 0;
@@ -35,7 +35,7 @@ struct Percept : GLDrawer {
   virtual double idMatchingCost(const Percept& other);
   virtual double fuse(PerceptPtr& other);
   virtual void write(ostream& os) const;
-  virtual void glDraw(OpenGL&) { NIY }
+  virtual void glDraw(rai::OpenGL&) { NIY }
   virtual Percept* newClone() const = 0;
 
 //private:
@@ -71,7 +71,7 @@ struct PercMesh : Percept {
 //  virtual double idMatchingCost(const Percept& other){ return 0.; }
   virtual double fuse(PerceptPtr& other);
   virtual void write(ostream& os) const { os <<"#V=" <<mesh.V.N; }
-  virtual void glDraw(OpenGL& gl) { mesh.glDraw(gl); }
+  virtual void glDraw(rai::OpenGL& gl) { mesh.glDraw(gl); }
   virtual Percept* newClone() const { return new PercMesh(*this); }
 };
 
@@ -84,7 +84,7 @@ struct PercPlane : Percept {
   virtual double idMatchingCost(const Percept& other);
   virtual double fuse(PerceptPtr& other);
   virtual void write(ostream& os) const;
-  virtual void glDraw(OpenGL&);
+  virtual void glDraw(rai::OpenGL&);
   virtual Percept* newClone() const { return new PercPlane(*this); }
 };
 
@@ -98,7 +98,7 @@ struct PercBox : Percept {
 //  virtual double idMatchingCost(const Percept& other) { return 0.; }
   virtual double fuse(PerceptPtr& other);
   virtual void write(ostream& os) const { Percept::write(os); os <<"size=" <<size; }
-  virtual void glDraw(OpenGL&);
+  virtual void glDraw(rai::OpenGL&);
   virtual Percept* newClone() const { return new PercBox(*this); }
 };
 

@@ -4,10 +4,10 @@
 #include <GL/glut.h>
 
 //implement a drawer
-struct MyDrawer : GLDrawer{
-  void glDraw(OpenGL& gl){
-    glStandardLight(nullptr, gl);
-    glColor(1,0,0);
+struct MyDrawer : rai::GLDrawer{
+  void glDraw(rai::OpenGL& gl){
+    rai::glStandardLight(nullptr, gl);
+    rai::glColor(1,0,0);
     glFrontFace(GL_CW);
     glutSolidTeapot(1.);
     glFrontFace(GL_CCW);
@@ -15,7 +15,7 @@ struct MyDrawer : GLDrawer{
 };
 
 void TEST(Mini) {
-  OpenGL gl;
+  rai::OpenGL gl;
   MyDrawer d;
 //  gl.reportEvents=true;
 //  gl.reportSelects=true;

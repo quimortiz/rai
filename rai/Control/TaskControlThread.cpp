@@ -12,10 +12,10 @@
 #include "../RosCom/baxter.h"
 #include "../Kin/frame.h"
 
-TaskControlThread::TaskControlThread(const Var<rai::Configuration>& _ctrl_config,
-                                     const Var<CtrlMsg>& _ctrl_ref,
-                                     const Var<CtrlMsg>& _ctrl_state,
-                                     const Var<CtrlObjectiveL>& _ctrl_tasks)
+TaskControlThread::TaskControlThread(const rai::Var<rai::Configuration>& _ctrl_config,
+                                     const rai::Var<CtrlMsg>& _ctrl_ref,
+                                     const rai::Var<CtrlMsg>& _ctrl_state,
+                                     const rai::Var<CtrlObjectiveL>& _ctrl_tasks)
   : Thread("TaskControlThread", .01),
     ctrl_config(this, _ctrl_config),
     ctrl_ref(this, _ctrl_ref),
@@ -215,8 +215,8 @@ void TaskControlThread::step() {
   }
 }
 
-ptr<CtrlObjective> addCtrlObjective(Var<CtrlObjectiveL>& ctrl_tasks,
-                                    Var<rai::Configuration>& ctrl_config,
+ptr<CtrlObjective> addCtrlObjective(rai::Var<CtrlObjectiveL>& ctrl_tasks,
+                                    rai::Var<rai::Configuration>& ctrl_config,
                                     const char* name, const ptr<Feature>& map,
                                     const ptr<CtrlMovingTarget>& ref) {
   NIY
@@ -228,8 +228,8 @@ ptr<CtrlObjective> addCtrlObjective(Var<CtrlObjectiveL>& ctrl_tasks,
 #endif
 }
 
-ptr<CtrlObjective> addCtrlObjective(Var<CtrlObjectiveL>& ctrl_tasks,
-                                    Var<rai::Configuration>& ctrl_config,
+ptr<CtrlObjective> addCtrlObjective(rai::Var<CtrlObjectiveL>& ctrl_tasks,
+                                    rai::Var<rai::Configuration>& ctrl_config,
                                     const char* name, FeatureSymbol fs, const StringA& frames,
                                     const ptr<CtrlMovingTarget>& ref) {
   return addCtrlObjective(ctrl_tasks, ctrl_config, name,
@@ -237,8 +237,8 @@ ptr<CtrlObjective> addCtrlObjective(Var<CtrlObjectiveL>& ctrl_tasks,
                           ref);
 }
 
-ptr<CtrlObjective> addCtrlObjective(Var<CtrlObjectiveL>& ctrl_tasks,
-                                    Var<rai::Configuration>& ctrl_config,
+ptr<CtrlObjective> addCtrlObjective(rai::Var<CtrlObjectiveL>& ctrl_tasks,
+                                    rai::Var<rai::Configuration>& ctrl_config,
                                     const char* name, FeatureSymbol fs, const StringA& frames,
                                     double duration) {
   return addCtrlObjective(ctrl_tasks, ctrl_config, name,
@@ -246,8 +246,8 @@ ptr<CtrlObjective> addCtrlObjective(Var<CtrlObjectiveL>& ctrl_tasks,
                           make_shared<CtrlTarget_Sine>(arr(), duration));
 }
 
-ptr<CtrlObjective> addCompliance(Var<CtrlObjectiveL>& ctrl_tasks,
-                                 Var<rai::Configuration>& ctrl_config,
+ptr<CtrlObjective> addCompliance(rai::Var<CtrlObjectiveL>& ctrl_tasks,
+                                 rai::Var<rai::Configuration>& ctrl_config,
                                  const char* name, FeatureSymbol fs, const StringA& frames,
                                  const arr& compliance) {
 #if 0
@@ -261,6 +261,6 @@ ptr<CtrlObjective> addCompliance(Var<CtrlObjectiveL>& ctrl_tasks,
 #endif
 }
 
-void removeCtrlObjective(Var<CtrlObjectiveL>& ctrl_tasks, CtrlObjective* t) {
+void removeCtrlObjective(rai::Var<CtrlObjectiveL>& ctrl_tasks, CtrlObjective* t) {
   ctrl_tasks.set()->removeValue(t);
 }

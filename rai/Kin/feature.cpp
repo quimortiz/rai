@@ -89,7 +89,7 @@ void Feature::phi(arr& y, arr& J, const ConfigurationL& Ctuple) {
 
 rai::String Feature::shortTag(const rai::Configuration& C) {
   rai::String s;
-  s <<niceTypeidName(typeid(*this));
+  s <<rai::niceTypeidName(typeid(*this));
   s <<'/' <<order;
   if(frameIDs.N<=3){
     for(uint i:frameIDs) s <<'-' <<C.frames.elem(i)->name;

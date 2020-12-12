@@ -12,9 +12,11 @@
 
 #include <iomanip>
 
+namespace rai {
+
 //===========================================================================
 
-KinViewer::KinViewer(const Var<rai::Configuration>& _kin, double beatIntervalSec, const char* _cameraFrameName)
+KinViewer::KinViewer(const Var<Configuration>& _kin, double beatIntervalSec, const char* _cameraFrameName)
   : Thread("KinViewer", beatIntervalSec),
     world(this, _kin, (beatIntervalSec<0.)) {
   if(_cameraFrameName && strlen(_cameraFrameName)>0) {
@@ -31,10 +33,10 @@ void KinViewer::open() {
   gl = new OpenGL(STRING("KinViewer: "<<world.name()));
   gl->add(glStandardScene);
   gl->add(glDrawMeshes, &meshesCopy);
-//  gl->add(rai::glDrawProxies, &proxiesCopy);
+//  gl->add(glDrawProxies, &proxiesCopy);
   gl->camera.setDefault();
   if(cameraFrameID>=0) {
-    rai::Frame* frame = world.get()->frames(cameraFrameID);
+    Frame* frame = world.get()->frames(cameraFrameID);
     double d;
     arr z;
     if(frame->ats.get<double>(d, "focalLength")) gl->camera.setFocalLength(d);
@@ -56,7 +58,7 @@ void KinViewer::close() {
 
 void KinViewer::step() {
   //-- get transforms, or all shapes if their number changed, and proxies
-  rai::Array<rai::Transformation> X;
+  Array<Transformation> X;
   world.readAccess();
   if(true || world->frames.N!=meshesCopy.N) { //need to copy meshes
     uint n=world->frames.N;
@@ -68,7 +70,7 @@ void KinViewer::step() {
     }
   }
   X.resize(world->frames.N);
-  for(rai::Frame* f:world().frames) X(f->ID) = f->ensure_X();
+  for(Frame* f:world().frames) X(f->ID) = f->ensure_X();
 
   {
     auto _dataLock = gl->dataLock(RAI_HERE);
@@ -153,8 +155,8 @@ void KinPathViewer::step() {
 
 //===========================================================================
 
-void renderConfigurations(const ConfigurationL& cs, const char* filePrefix, int tprefix, int w, int h, rai::Camera* camera) {
-  rai::Configuration copy;
+void renderConfigurations(const ConfigurationL& cs, const char* filePrefix, int tprefix, int w, int h, Camera* camera) {
+  Configuration copy;
   copy.orsDrawMarkers=false;
   rai::system(STRING("mkdir -p " <<filePrefix));
   rai::system(STRING("rm -f " <<filePrefix <<"*.ppm"));
@@ -182,15 +184,15 @@ void renderConfigurations(const ConfigurationL& cs, const char* filePrefix, int 
 //    gl(STRING("KinPoseViewer: " <<poseVarNames)) {
 //  for(const String& varname: poseVarNames) {
 //    poses.append(new Var<arr>(this, varname, (beatIntervalSec<0.)));   //listen only when beatInterval=1.
-//    copies.append(new rai::Configuration());
+//    copies.append(new Configuration());
 //  }
 //  copy = model.get();
 //  computeMeshNormals(copy.frames);
-//  for(rai::Configuration *w: copies) w->copy(copy, true);
+//  for(Configuration *w: copies) w->copy(copy, true);
 //  if(beatIntervalSec>=0.) threadLoop();
 //}
 
-KinPoseViewer::KinPoseViewer(Var<rai::Configuration>& _kin, const Var<arr>& _frameState, double beatIntervalSec)
+KinPoseViewer::KinPoseViewer(Var<Configuration>& _kin, const Var<arr>& _frameState, double beatIntervalSec)
   : Thread("KinPoseViewer", beatIntervalSec),
     model(this, _kin, (beatIntervalSec<0.)),
     frameState(this, _frameState, (beatIntervalSec<0.)) {
@@ -214,7 +216,7 @@ void KinPoseViewer::step() {
       auto _dataLock = gl.dataLock(RAI_HERE);
       meshesCopy.resize(n);
       for(uint i=0; i<n; i++) {
-        rai::Frame* f = modelGet->frames.elem(i);
+        Frame* f = modelGet->frames.elem(i);
         if(f->shape) meshesCopy.elem(i) = f->shape->mesh();
         else meshesCopy.elem(i).clear();
       }
@@ -246,7 +248,7 @@ void KinPoseViewer::glDraw(OpenGL& gl) {
   for(uint i=0; i<n; i++) {
     if(meshesCopy.elem(i).V.N) {
       if(frameCount >= X.d0) frameCount = 0;
-      rai::Transformation T;
+      Transformation T;
       T.set(&X.operator()(frameCount, i, 0));
       glTransform(T);
       meshesCopy.elem(i).glDraw(gl);
@@ -258,7 +260,7 @@ void KinPoseViewer::glDraw(OpenGL& gl) {
 
 //===========================================================================
 
-ComputeCameraView::ComputeCameraView(const Var<rai::Configuration>& _modelWorld, double beatIntervalSec)
+ComputeCameraView::ComputeCameraView(const Var<Configuration>& _modelWorld, double beatIntervalSec)
   : Thread("ComputeCameraView", beatIntervalSec),
     modelWorld(this, _modelWorld, (beatIntervalSec<.0)),
     cameraView(this), //"cameraView"),
@@ -286,7 +288,7 @@ void ComputeCameraView::step() {
   copy = modelWorld.get();
   copy.orsDrawJoints = copy.orsDrawMarkers = copy.orsDrawProxies = false;
 
-  rai::Frame* kinectShape = copy.getFrame("endeffKinect");
+  Frame* kinectShape = copy.getFrame("endeffKinect");
   if(kinectShape) { //otherwise 'copy' is not up-to-date yet
     {
       auto _dataLock = gl.dataLock(RAI_HERE);
@@ -310,3 +312,4 @@ void ComputeCameraView::step() {
   }
 }
 
+} //namespace

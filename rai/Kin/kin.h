@@ -11,17 +11,18 @@
 #include "featureSymbols.h"
 #include "../Core/array.h"
 #include "../Geo/geo.h"
-#include "../Geo/geoms.h"
+#include "../Geo/mesh.h"
+
+
+//===========================================================================
+
+namespace rai {
 
 struct OpenGL;
 struct PhysXInterface;
 struct SwiftInterface;
 struct OdeInterface;
 struct FeatherstoneInterface;
-
-//===========================================================================
-
-namespace rai {
 
 struct Joint;
 struct Shape;

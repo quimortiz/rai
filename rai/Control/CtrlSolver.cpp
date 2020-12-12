@@ -84,14 +84,14 @@ void CtrlSolver::update(rai::Configuration& C) {
 
     if(o->movingTarget) {
       o->y_buffer = o->getValue(*this);
-      ActStatus s_new = o->movingTarget->step(tau, o.get(), o->y_buffer);
+      rai::ActStatus s_new = o->movingTarget->step(tau, o.get(), o->y_buffer);
       if(o->status != s_new) {
         o->status = s_new;
         //callbacks
       }
     } else {
-      if(o->status != AS_running) {
-        o->status = AS_running;
+      if(o->status != rai::AS_running) {
+        o->status = rai::AS_running;
         //callbacks
       }
     }

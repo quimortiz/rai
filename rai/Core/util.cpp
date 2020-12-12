@@ -81,7 +81,7 @@ const char* rai::String::readSkipSymbols = " \t";
 const char* rai::String::readStopSymbols = "\n\r";
 int   rai::String::readEatStopSymbol     = 1;
 rai::String rai::errString;
-Mutex coutMutex;
+rai::Mutex rai::coutMutex;
 rai::LogObject _log("global", 2, 3);
 
 //===========================================================================
@@ -1165,6 +1165,8 @@ void  rai::Rnd::seed250(int32_t seed) {
 // Inotify
 //
 
+namespace rai{
+
 #ifndef RAI_MSVC
 Inotify::Inotify(const char* filename): fd(0), wd(0) {
   fd = inotify_init();
@@ -1302,7 +1304,7 @@ struct GnuplotServer {
   }
 };
 
-Singleton<GnuplotServer> gnuplotServer;
+rai::Singleton<GnuplotServer> gnuplotServer;
 
 void gnuplot(const char* command, bool pauseMouse, bool persist, const char* PDFfile) {
   if(rai::getDisableGui()) return;
@@ -1344,7 +1346,6 @@ void gnuplot(const char* command, bool pauseMouse, bool persist, const char* PDF
 // Cumulative probability for the Standard Normal Distribution
 //
 
-namespace rai {
 double erf(double x) {
   double t, z, retval;
   z = fabs(x);
@@ -1373,7 +1374,6 @@ double gaussIntExpectation(double x) {
   double norm=gaussInt(x) / (::sqrt(RAI_2PI));
   return - norm*rai::approxExp(-.5*x*x);
 }
-}
 
 //===========================================================================
 // MISC
@@ -1396,6 +1396,8 @@ const char* niceTypeidName(const std::type_info& type) {
   while(*name>='0' && *name<='9') name++;
   return name;
 }
+
+} //namespace
 
 //===========================================================================
 //

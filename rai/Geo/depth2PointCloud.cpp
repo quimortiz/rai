@@ -8,6 +8,8 @@
 
 #include "depth2PointCloud.h"
 
+namespace rai {
+
 Depth2PointCloud::Depth2PointCloud(Var<floatA>& _depth, float _fx, float _fy, float _px, float _py)
   : Thread("Depth2PointCloud"),
     depth(this, _depth, true),
@@ -86,3 +88,4 @@ void depthData2point(arr& pt, const arr& Fxypxy) {
   depthData2point(pt.p, Fxypxy.p);
 }
 
+} //namespace

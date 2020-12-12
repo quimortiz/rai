@@ -15,10 +15,10 @@ enum RobotType { ROB_sim=0, ROB_pr2, ROB_baxter, ROB_kukaWSG };
 enum SensorId { SEN_depth };
 
 struct RobotAbstraction {
-  Var<rai::Configuration> K;
-  Var<arr> frameState;
-  Var<arr> jointState;
-  Var<double> timeToGo;
+  rai::Var<rai::Configuration> K;
+  rai::Var<arr> frameState;
+  rai::Var<arr> jointState;
+  rai::Var<double> timeToGo;
 
   virtual ~RobotAbstraction() {}
   //-- basic info

@@ -28,10 +28,16 @@
 #  include <GLFW/glfw3.h>
 #endif
 
+#ifdef RAI_FREEGLUT
+#  include <GL/freeglut.h>
+#endif
+
 #ifdef RAI_PNG
 #  include <png.h>
 #  include <unistd.h>
 #endif
+
+namespace rai {
 
 OpenGL& NoOpenGL = *((OpenGL*)(nullptr));
 
@@ -43,7 +49,6 @@ Singleton<SingleGLAccess> singleGLAccess;
 
 #ifdef RAI_FREEGLUT
 
-#include <GL/freeglut.h>
 //===========================================================================
 //
 // A freeglut singleton to ensure once initialization
@@ -2676,3 +2681,4 @@ void read_png(byteA& img, const char* file_name, bool swap_rows) {
 #endif
 }
 
+} //namespace

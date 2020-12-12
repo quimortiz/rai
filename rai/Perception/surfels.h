@@ -41,8 +41,8 @@ struct SurfelStatistics {
 };
 
 struct Surfels {
-  OpenGL gl;
-  Mutex mx;
+  rai::OpenGL gl;
+  rai::Mutex mx;
   floatA pos, norm, col, rad;
   rai::Array<SurfelStatistics> D;
   uint32A surfelIdx, rndPerm;
@@ -54,7 +54,7 @@ struct Surfels {
   void glDraw(bool renderIndex);
 
   void recomputeSurfelIndices();
-  void pointCloud2Surfels(const arr& pts, const arr& cols, OpenGL& gl);
+  void pointCloud2Surfels(const arr& pts, const arr& cols, rai::OpenGL& gl);
 };
 
 void glDrawSurfels(void* classP);

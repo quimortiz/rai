@@ -39,11 +39,11 @@ void testLinReg(const char *datafile=nullptr) {
   arr s_grid = sqrt(evaluateBayesianRidgeRegressionSigma(Phi, Sigma)/*+rai::sqr(sigma)*/);
 
   if(X.d1==1){
-    plot->Gnuplot();
-    if(plotDev) plot->FunctionPrecision(X_grid, y_grid, y_grid+s_grid, y_grid-s_grid);
-    else plot->Function(X_grid, y_grid);
-    plot->Points(X,y);
-    plot->update(true);
+    rai::plot->Gnuplot();
+    if(plotDev) rai::plot->FunctionPrecision(X_grid, y_grid, y_grid+s_grid, y_grid-s_grid);
+    else rai::plot->Function(X_grid, y_grid);
+    rai::plot->Points(X,y);
+    rai::plot->update(true);
   }
 
   //-- gnuplot
@@ -57,13 +57,13 @@ void testLinReg(const char *datafile=nullptr) {
       FILE("z.model") <<~y_grid.reshape(31,31);
       FILE("z.model_s") <<~(y_grid+s_grid).reshape(31,31);
       FILE("z.model__s") <<~(y_grid-s_grid).reshape(31,31);
-      gnuplot(STRING("splot [-3:3][-3:3] '" <<datafile <<"' w p ps 1 pt 3,\
+      rai::gnuplot(STRING("splot [-3:3][-3:3] '" <<datafile <<"' w p ps 1 pt 3,\
                      'z.model' matrix us ($1/5-3):($2/5-3):3 w l,\
                      'z.model_s' matrix us ($1/5-3):($2/5-3):3 w l,\
                      'z.model__s' matrix us ($1/5-3):($2/5-3):3 w l; pause mouse"), false, true, "z.pdf");
     }else{
       FILE("z.model") <<~y_grid.reshape(31,31);
-      gnuplot(STRING("splot [-3:3][-3:3] '" <<datafile <<"' w p ps 1 pt 3,\
+      rai::gnuplot(STRING("splot [-3:3][-3:3] '" <<datafile <<"' w p ps 1 pt 3,\
                      'z.model' matrix us ($1/5-3):($2/5-3):3 w l"), false, true, "z.pdf");
     }
   }
@@ -104,11 +104,11 @@ void testRobustRegression(const char *datafile=nullptr) {
   arr s_grid = sqrt(evaluateBayesianRidgeRegressionSigma(Phi, Sigma)/*+rai::sqr(sigma)*/);
 
   if(X.d1==1){
-    plot->Gnuplot();
-    plot->FunctionPrecision(X_grid, y_grid, y_grid+s_grid, y_grid-s_grid);
-    //plot->Function(X_grid, y_grid);
-    plot->Points(X,y);
-    plot->update(true);
+    rai::plot->Gnuplot();
+    rai::plot->FunctionPrecision(X_grid, y_grid, y_grid+s_grid, y_grid-s_grid);
+    //rai::plot->Function(X_grid, y_grid);
+    rai::plot->Points(X,y);
+    rai::plot->update(true);
   }
 
   //-- gnuplot
@@ -121,7 +121,7 @@ void testRobustRegression(const char *datafile=nullptr) {
     FILE("z.model") <<~y_grid.reshape(31,31);
     FILE("z.model_s") <<~(y_grid+s_grid).reshape(31,31);
     FILE("z.model__s") <<~(y_grid-s_grid).reshape(31,31);
-    gnuplot(STRING("splot [-3:3][-3:3] '" <<datafile <<"' w p ps 1 pt 3,\
+    rai::gnuplot(STRING("splot [-3:3][-3:3] '" <<datafile <<"' w p ps 1 pt 3,\
                    'z.model' matrix us ($1/5-3):($2/5-3):3 w l,\
                    'z.model_s' matrix us ($1/5-3):($2/5-3):3 w l,\
                    'z.model__s' matrix us ($1/5-3):($2/5-3):3 w l; pause mouse"), false, true, "z.pdf");
@@ -198,10 +198,10 @@ void testKernelReg(const char *datafile=nullptr) {
   s_grid = sqrt(s_grid);
 
   if(X.d1==1){
-    plot->Gnuplot();
-    plot->FunctionPrecision(X_grid, y_grid, y_grid+s_grid, y_grid-s_grid);
-    plot->Points(X,y);
-    plot->update(true);
+    rai::plot->Gnuplot();
+    rai::plot->FunctionPrecision(X_grid, y_grid, y_grid+s_grid, y_grid-s_grid);
+    rai::plot->Points(X,y);
+    rai::plot->update(true);
   }
 
   //-- gnuplot
@@ -249,11 +249,11 @@ void test2Class() {
   arr pba_grid=exp(ybay_grid); pba_grid /= pba_grid+1.;
 
   if(X.d1==1){
-    plot->Gnuplot();
-    plot->FunctionPrecision(X_grid, p_grid, pup_grid, pdn_grid);
-    plot->Function(X_grid, pba_grid);
-    plot->Points(X,y);
-    plot->update(true);
+    rai::plot->Gnuplot();
+    rai::plot->FunctionPrecision(X_grid, p_grid, pup_grid, pdn_grid);
+    rai::plot->Function(X_grid, pba_grid);
+    rai::plot->Points(X,y);
+    rai::plot->update(true);
   }
 
   rai::arrayBrackets="  ";
@@ -265,8 +265,8 @@ void test2Class() {
   if(X.d1==2){
     FILE("z.train") <<catCol(X, y);
     FILE("z.model") <<p_grid.reshape(51,51);
-    gnuplot("load 'plt.contour'; pause mouse", false, true, "z.pdf");
-    gnuplot("load 'plt.contour2'; pause mouse", false, true, "z.pdf");
+    rai::gnuplot("load 'plt.contour'; pause mouse", false, true, "z.pdf");
+    rai::gnuplot("load 'plt.contour2'; pause mouse", false, true, "z.pdf");
   }
 }
 
@@ -287,18 +287,18 @@ void TEST(KernelLogReg){
   arr p_grid = klr.evaluate(X_grid, p_ba, p_hi, p_lo);
 
   if(X.d1==1){
-    plot->Gnuplot();
-    plot->FunctionPrecision(X_grid, p_grid, p_hi, p_lo);
-    plot->Function(X_grid, p_ba);
-    plot->Points(X,y);
-    plot->update(true);
+    rai::plot->Gnuplot();
+    rai::plot->FunctionPrecision(X_grid, p_grid, p_hi, p_lo);
+    rai::plot->Function(X_grid, p_ba);
+    rai::plot->Points(X,y);
+    rai::plot->update(true);
   }
   if(X.d1==2){
     rai::arrayBrackets="  ";
     FILE("z.train") <<catCol(X, y);
     FILE("z.model") <<~p_grid.reshape(51,51);
-    gnuplot("load 'plt.contour'; pause mouse", false, true, "z.pdf");
-    gnuplot("load 'plt.contour2'; pause mouse", false, true, "z.pdf");
+    rai::gnuplot("load 'plt.contour'; pause mouse", false, true, "z.pdf");
+    rai::gnuplot("load 'plt.contour2'; pause mouse", false, true, "z.pdf");
   }
   rai::wait();
 }
@@ -336,14 +336,14 @@ void TEST(MultiClass){
   FILE("z.model2") <<p_grid[1];
   if(y.d1==3){
     FILE("z.model3") <<p_grid[2];
-    gnuplot("load 'plt.contourMulti'; pause mouse", false, true, "z.pdf");
-    gnuplot("load 'plt.contourMulti2'; pause mouse", false, true, "z.pdf");
+    rai::gnuplot("load 'plt.contourMulti'; pause mouse", false, true, "z.pdf");
+    rai::gnuplot("load 'plt.contourMulti2'; pause mouse", false, true, "z.pdf");
   }
   if(y.d1==4){
     FILE("z.model3") <<p_grid[2];
     FILE("z.model4") <<p_grid[3];
-    gnuplot("load 'plt.contourM4'; pause mouse", false, true, "z.pdf");
-    gnuplot("load 'plt.contourM4_2'; pause mouse", false, true, "z.pdf");
+    rai::gnuplot("load 'plt.contourM4'; pause mouse", false, true, "z.pdf");
+    rai::gnuplot("load 'plt.contourM4_2'; pause mouse", false, true, "z.pdf");
   }
 }
 
@@ -399,10 +399,10 @@ void exercise1() {
   FILE("z.train") <<catCol(X, y);
   if(X.d1==1) {
     FILE("z.model") <<catCol(X_grid, y_grid);
-    gnuplot("plot 'z.train' us 1:2 w p,'z.model' us 1:2 w l", false, true, "z.pdf");
+    rai::gnuplot("plot 'z.train' us 1:2 w p,'z.model' us 1:2 w l", false, true, "z.pdf");
   } else {
     FILE("z.model") <<~y_grid.reshape(31,31);
-    gnuplot("splot [-3:3][-3:3] 'z.train' w p, 'z.model' matrix us ($1/5-3):($2/5-3):3 w l", false, true, "z.pdf");
+    rai::gnuplot("splot [-3:3][-3:3] 'z.train' w p, 'z.model' matrix us ($1/5-3):($2/5-3):3 w l", false, true, "z.pdf");
   }
 }
 
@@ -466,7 +466,7 @@ int main(int argc, char *argv[]) {
     break;
   }
   
-  plot->Clear();
+  rai::plot->Clear();
   return 0;
 }
 

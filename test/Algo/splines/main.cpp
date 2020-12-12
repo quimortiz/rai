@@ -59,26 +59,26 @@ void TEST(BSpline){
 
   arr path = S.eval();
 //  plot->Gnuplot();
-  plot->Opengl();
-  plot->drawBox=true;
-  S.plotBasis(plot());
-  plot->update();
+  rai::plot->Opengl();
+  rai::plot->drawBox=true;
+  S.plotBasis(rai::plot());
+  rai::plot->update();
   
-  plot->Clear();
-  plot->Function(path);
-  plot->Function(S.points);
-  plot->Points(S.points);
-  plot->update();
+  rai::plot->Clear();
+  rai::plot->Function(path);
+  rai::plot->Function(S.points);
+  rai::plot->Points(S.points);
+  rai::plot->update();
 
   for(double lambda = 0.; lambda < .1; lambda += .001) {
     path = S.smooth(lambda);
-    plot->Clear();
-    plot->Function(path);
-    plot->Function(S.points);
-    plot->Points(S.points);
-    plot->update(false);
+    rai::plot->Clear();
+    rai::plot->Function(path);
+    rai::plot->Function(S.points);
+    rai::plot->Points(S.points);
+    rai::plot->update(false);
   }
-  plot->update();
+  rai::plot->update();
 
   rai::arrayBrackets="  ";
   ofstream fil("z.test");
@@ -88,7 +88,7 @@ void TEST(BSpline){
   }
   FILE("z.data") <<X;
   fil.close();
-  gnuplot("plot 'z.test' us 1:2, '' us 1:4, 'z.data' us ($0/9):1 w p", true, true);
+  rai::gnuplot("plot 'z.test' us 1:2, '' us 1:4, 'z.data' us ($0/9):1 w p", true, true);
 
   rai::wait();
   //Cost cost;
@@ -118,15 +118,15 @@ void TEST(BSpline){
     path = S.eval();
     cout <<cost(NoArr, NoArr, path) <<endl;
 
-    plot->Clear();
-    plot->Function(path);
-    plot->Function(S.points);
-    plot->Points(S.points);
-    plot->update(false);
+    rai::plot->Clear();
+    rai::plot->Function(path);
+    rai::plot->Function(S.points);
+    rai::plot->Points(S.points);
+    rai::plot->update(false);
   }
-  plot->update();
+  rai::plot->update();
 
-  plot->Close();
+  rai::plot->Close();
 }
 
 void TEST(BSpline2){
@@ -145,9 +145,9 @@ void TEST(BSpline2){
     fil <<t <<' ' <<S.eval(t) <<endl;
   }
   fil.close();
-  gnuplot("plot 'z.test' us 1:2", true);
+  rai::gnuplot("plot 'z.test' us 1:2", true);
 
-  plot->Close();
+  rai::plot->Close();
 }
 
 void TEST(Path){
@@ -180,7 +180,7 @@ void TEST(Path){
     fil <<time <<' ' <<P.getPosition(time) <<' ' <<P.getVelocity(time) <<endl;
   }
   fil.close();
-  gnuplot("plot 'z.test' us 1:2 t 'pos', '' us 1:3 t 'vel', 'z.points' us ($0/10):1 w p", true, true);
+  rai::gnuplot("plot 'z.test' us 1:2 t 'pos', '' us 1:3 t 'vel', 'z.points' us ($0/10):1 w p", true, true);
 
 }
 

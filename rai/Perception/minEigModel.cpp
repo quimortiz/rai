@@ -164,7 +164,7 @@ void MinEigModel::calcDensity() {
   density = coveredData() / circum*circum;
 }
 
-void MinEigModel::glDraw(OpenGL& gl) {
+void MinEigModel::glDraw(rai::OpenGL& gl) {
   if(eig.x_lo.N!=3) return;
   if(!convexHull.V.N) {
     rai::Quaternion rot;
@@ -172,7 +172,7 @@ void MinEigModel::glDraw(OpenGL& gl) {
     glPushMatrix();
     glTranslatef(mean(0), mean(1), mean(2));
     glRotate(rot);
-    glDrawBox(.5, .5, .01);
+    rai::glDrawBox(.5, .5, .01);
     glBegin(GL_LINES);
     glVertex3d(0., 0., 0.);
     glVertex3d(0., 0., .1);

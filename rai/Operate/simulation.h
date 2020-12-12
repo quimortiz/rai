@@ -42,7 +42,7 @@ struct Plan {
 
 //=============================================================================
 
-struct Simulation : GLDrawer {
+struct Simulation : rai::GLDrawer {
   struct Simulation_self* self=0;
   rai::Configuration K;
 
@@ -78,6 +78,6 @@ struct Simulation : GLDrawer {
   StringA getObjectNames();
   ContactA getContactInfo(double margin=.1);
 
-  void glDraw(OpenGL&);
+  void glDraw(rai::OpenGL&);
 };
 

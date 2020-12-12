@@ -1,11 +1,11 @@
 #include <Gui/opengl.h>
 
-void draw1(void*,OpenGL& gl){
-  glStandardLight(nullptr, gl);
-  glColor(1,0,0);
+void draw1(void*, rai::OpenGL& gl){
+  rai::glStandardLight(nullptr, gl);
+  rai::glColor(1,0,0);
   glFrontFace(GL_CW);
   glutSolidTeapot(1.);
-  glDrawAxes(1.);
+  rai::glDrawAxes(1.);
   glFrontFace(GL_CCW);
 }
 
@@ -21,7 +21,7 @@ int main(int argc, char** argv){
 
   bool offscreen=true;
 
-  OpenGL gl("bla", 800, 600, offscreen);
+  rai::OpenGL gl("bla", 800, 600, offscreen);
   gl.camera.setZRange(8, 10);
   gl.add(draw1,0);
 //  gl.update();
@@ -32,7 +32,7 @@ int main(int argc, char** argv){
 
   if(!offscreen){
     gl.watch();
-    OpenGL gl2("depth", 800, 600);
+    rai::OpenGL gl2("depth", 800, 600);
     gl2.watchImage(gl.captureImage, true, 1.);
     gl2.displayGrey(gl.captureDepth, true, 1.);
   }

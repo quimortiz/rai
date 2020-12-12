@@ -13,30 +13,28 @@
 #include "../Gui/opengl.h"
 #include "../Gui/color.h"
 
-void drawGnuplot(rai::sPlotModule& data);
+namespace rai {
+
+void drawGnuplot(sPlotModule& data);
 
 //===========================================================================
 //
 // global structures
 //
 
-Singleton<rai::PlotModule> plot;
-
-namespace rai {
+Singleton<PlotModule> plot;
 
 struct sPlotModule {
-  rai::Array<arr> array;
-  rai::Array<byteA> images;
-  rai::Array<arr> points;
-  rai::Array<arr> lines;
-  rai::Array<rai::String> legend;
-  rai::Array<rai::Vector> planes;
-  rai::Mesh mesh;
+  Array<arr> array;
+  Array<byteA> images;
+  Array<arr> points;
+  Array<arr> lines;
+  Array<String> legend;
+  Array<Vector> planes;
+  Mesh mesh;
 };
 
-}
-
-rai::PlotModule::PlotModule() {
+PlotModule::PlotModule() {
   self = make_unique<sPlotModule>();
   mode=gnupl;
   gl=0;
@@ -49,7 +47,7 @@ rai::PlotModule::PlotModule() {
   thickLines=0;
 }
 
-rai::PlotModule::~PlotModule() {
+PlotModule::~PlotModule() {
 #ifdef RAI_GL
   if(gl) { delete gl; gl=nullptr; }
 #endif
@@ -60,8 +58,8 @@ rai::PlotModule::~PlotModule() {
 // C interface implementations
 //
 
-void rai::PlotModule::update(bool wait, const char* txt) {
-  if(!rai::getInteractivity()) {
+void PlotModule::update(bool wait, const char* txt) {
+  if(!getInteractivity()) {
     wait=false;
   }
   switch(mode) {
@@ -87,7 +85,7 @@ void rai::PlotModule::update(bool wait, const char* txt) {
   }
 }
 
-void rai::PlotModule::Close() {
+void PlotModule::Close() {
 #ifdef RAI_GL
   if(mode==opengl) {
     if(gl) { delete gl; gl=NULL; }
@@ -95,7 +93,7 @@ void rai::PlotModule::Close() {
 #endif
 }
 
-void rai::PlotModule::Clear() {
+void PlotModule::Clear() {
   self->array.clear();
   self->points.clear();
   self->lines.clear();
@@ -104,9 +102,9 @@ void rai::PlotModule::Clear() {
 #endif
 }
 
-void rai::PlotModule::Gnuplot() { mode=gnupl; }
+void PlotModule::Gnuplot() { mode=gnupl; }
 
-void rai::PlotModule::Opengl(bool perspective, double xl, double xh, double yl, double yh, double zl, double zh) {
+void PlotModule::Opengl(bool perspective, double xl, double xh, double yl, double yh, double zl, double zh) {
   mode=opengl;
   perspective=perspective;
   if(!gl) {
@@ -125,9 +123,9 @@ void rai::PlotModule::Opengl(bool perspective, double xl, double xh, double yl, 
   gl->update();
 }
 
-void rai::PlotModule::Image(const byteA& x) { self->images.append(x); }
+void PlotModule::Image(const byteA& x) { self->images.append(x); }
 
-void rai::PlotModule::Function(const arr& f, double x0, double x1) {
+void PlotModule::Function(const arr& f, double x0, double x1) {
   arr X;
   uint i, j;
   if(f.nd==2) {
@@ -150,14 +148,14 @@ void rai::PlotModule::Function(const arr& f, double x0, double x1) {
   self->lines.append(X);
 }
 
-void rai::PlotModule::Functions(const arr& F, double x0, double x1) {
+void PlotModule::Functions(const arr& F, double x0, double x1) {
   CHECK_EQ(F.nd, 2, "");
   arr tF;
   transpose(tF, F);
   for(uint j=0; j<tF.d0; j++) Function(tF[j], x0, x1);
 }
 
-void rai::PlotModule::FunctionPoints(const arr& x, const arr& f) {
+void PlotModule::FunctionPoints(const arr& x, const arr& f) {
   CHECK_EQ(x.d0, f.d0, "Domain and image of function have different size!")
   arr X(x.d0, x.d1+1);
   uint i, j;
@@ -168,7 +166,7 @@ void rai::PlotModule::FunctionPoints(const arr& x, const arr& f) {
   self->points.append(X);
 }
 
-void rai::PlotModule::Function(const arr& x, const arr& f) {
+void PlotModule::Function(const arr& x, const arr& f) {
   CHECK_EQ(x.d0, f.d0, "Domain and image of function have different size!")
   CHECK_EQ(f.nd, 1, "Function image should be 1D")
   CHECK(x.d[x.nd-1]<3, "Can handle up to 2D domains")
@@ -181,7 +179,7 @@ void rai::PlotModule::Function(const arr& x, const arr& f) {
   self->lines.append(X);
 }
 
-void rai::PlotModule::FunctionPrecision(const arr& x, const arr& f, const arr& h, const arr& l) {
+void PlotModule::FunctionPrecision(const arr& x, const arr& f, const arr& h, const arr& l) {
   CHECK_EQ(x.d0, f.d0, "Domain and image of function have different size!")
   CHECK(f.nd==1&&h.nd==1&&l.nd==1, "Function image should be 1D")
   CHECK(x.d[x.nd-1]<2, "Can handle up to 1D domains")
@@ -196,7 +194,7 @@ void rai::PlotModule::FunctionPrecision(const arr& x, const arr& f, const arr& h
   self->lines.append(X);
 }
 
-void rai::PlotModule::Surface(const arr& X) {
+void PlotModule::Surface(const arr& X) {
   self->array.append(X);
 #ifdef RAI_GL
   self->mesh.clear();
@@ -207,25 +205,25 @@ void rai::PlotModule::Surface(const arr& X) {
 #endif
 }
 
-void rai::PlotModule::Point(double x, double y, double z) {
+void PlotModule::Point(double x, double y, double z) {
   arr p(1, 3); p(0, 0)=x; p(0, 1)=y; p(0, 2)=z;
   self->points.append(p);
 }
 
-void rai::PlotModule::Point(const arr& x) {
+void PlotModule::Point(const arr& x) {
   arr p; p.referTo(x); p.reshape(1, p.N);
   self->points.append(p);
 }
 
-void rai::PlotModule::Points(const arr& X) {
+void PlotModule::Points(const arr& X) {
   self->points.append(X);
 }
 
-void rai::PlotModule::ClearPoints() {
+void PlotModule::ClearPoints() {
   self->points.clear();
 }
 
-void rai::PlotModule::Line(const arr& X, bool closed) {
+void PlotModule::Line(const arr& X, bool closed) {
   arr& app = self->lines.append(X);
   if(closed && app.d0) {
     arr x;
@@ -234,7 +232,7 @@ void rai::PlotModule::Line(const arr& X, bool closed) {
   }
 }
 
-void rai::PlotModule::Points(const arr& X, const arr& Y) {
+void PlotModule::Points(const arr& X, const arr& Y) {
   arr P;
   uint i, j;
   if(X.nd==2) {
@@ -250,7 +248,7 @@ void rai::PlotModule::Points(const arr& X, const arr& Y) {
   self->points.append(P);
 }
 
-void rai::PlotModule::Covariance(const arr& mean, const arr& cov) {
+void PlotModule::Covariance(const arr& mean, const arr& cov) {
   if(mean.nd==2) {
     for(uint k=0; k<mean.d0; k++) Covariance(mean[k], cov[k]);
     return;
@@ -351,7 +349,7 @@ void rai::PlotModule::Covariance(const arr& mean, const arr& cov) {
   }
 }
 
-void rai::PlotModule::VectorField(const arr& X, const arr& dX) {
+void PlotModule::VectorField(const arr& X, const arr& dX) {
   CHECK(X.nd==2 && samedim(X, dX), "");
   uint i;
   arr l(2, X.d1);
@@ -362,7 +360,7 @@ void rai::PlotModule::VectorField(const arr& X, const arr& dX) {
   }
 }
 
-void rai::PlotModule::MatrixFlow(uintA& M, double len) {
+void PlotModule::MatrixFlow(uintA& M, double len) {
   CHECK_EQ(M.nd, 2, "");
   uint i, j;
   arr X, dX;
@@ -383,10 +381,10 @@ void rai::PlotModule::MatrixFlow(uintA& M, double len) {
 }
 
 #ifdef RAI_gauss_h
-void rai::PlotModule::Gaussians(const GaussianA& G) {
+void PlotModule::Gaussians(const GaussianA& G) {
   for(uint k=0; k<G.N; k++) { G(k).makeC(); Covariance(G(k).c, G(k).C); }
 }
-void rai::PlotModule::Gaussians(const GaussianL& G) {
+void PlotModule::Gaussians(const GaussianL& G) {
   for(uint k=0; k<G.N; k++) { G(k)->makeC(); Covariance(G(k)->c, G(k)->C); }
 }
 #endif
@@ -396,14 +394,14 @@ void rai::PlotModule::Gaussians(const GaussianL& G) {
 // OpenGL draw routine
 //
 
-void rai::PlotModule::glDraw(OpenGL& gl) {
+void PlotModule::glDraw(OpenGL& gl) {
 #ifdef RAI_GL
   sPlotModule& data=*self;
 //  uint a, i, j;
 
   uint idx = 0;
 
-  rai::Color c;
+  Color c;
 
   double x=0., y=0., z=0.;
 
@@ -606,13 +604,13 @@ void rai::PlotModule::glDraw(OpenGL& gl) {
 #define PLOTEVERY(block, with)  gnuplotcmd \
       <<"'z.plotdata' every :::" <<(block) <<"::" <<(block) <<(with);
 
-void drawGnuplot(rai::sPlotModule& data) {
+void drawGnuplot(sPlotModule& data) {
   uint i;
 
   //openfiles
-  rai::String gnuplotcmd;
+  String gnuplotcmd;
   std::ofstream gnuplotdata;
-  rai::open(gnuplotdata, "z.plotdata");
+  open(gnuplotdata, "z.plotdata");
   uint block=0;
 
   // include custom definition file if exists
@@ -625,8 +623,8 @@ void drawGnuplot(rai::sPlotModule& data) {
   if(data.lines.N+data.points.N) gnuplotcmd <<"\nplot \\\n";
 
   //pipe data
-  bool ior=rai::IOraw;
-  rai::IOraw=true;
+  bool ior=IOraw;
+  IOraw=true;
   //lines
   for(i=0; i<data.lines.N; i++) {
     data.lines(i).write(gnuplotdata, " ", "\n", "  ", false, false);
@@ -649,7 +647,7 @@ void drawGnuplot(rai::sPlotModule& data) {
     data.points(i).write(gnuplotdata, " ", "\n", "  ", false, false);
     gnuplotdata <<'\n' <<std::endl;
     if(block) gnuplotcmd <<", \\\n";
-    rai::String a=" with p pt 3";
+    String a=" with p pt 3";
     if(i<data.legend.N) a<< " title '" <<data.legend(i) <<"' ";
     PLOTEVERY(block, a);
     block++;
@@ -670,7 +668,7 @@ void drawGnuplot(rai::sPlotModule& data) {
     PLOTEVERY(block, " with l notitle");
     block++;
   }
-  rai::IOraw=ior;
+  IOraw=ior;
   gnuplotcmd <<endl;
 
   //close files
@@ -697,3 +695,5 @@ lo[2]=zl; hi[2]=zh;
  y=(hi[1]-lo[1])*(y+1.)/2. + lo[1];
  }
 */
+
+} //namespace

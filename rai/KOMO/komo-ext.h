@@ -91,7 +91,7 @@ struct KOMO_ext : KOMO {
 
   void getPhysicsReference(uint subSteps=10, int display=0);
   void playInPhysics(uint subSteps=10, bool display=false);
-  PhysXInterface& physx() { return world.physx(); }
+  rai::PhysXInterface& physx() { return world.physx(); }
 
   //===========================================================================
   //

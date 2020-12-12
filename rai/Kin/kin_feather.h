@@ -11,6 +11,8 @@
 #include "kin.h"
 #include "../Geo/geo.h"
 
+namespace rai {
+
 struct F_Link {
   int ID=-1;
   int type=-1;
@@ -56,3 +58,5 @@ struct FeatherstoneInterface {
   void fwdDynamics_aba_1D(arr& qdd, const arr& qd, const arr& tau);
   void invDynamics(arr& tau, const arr& qd, const arr& qdd);
 };
+
+} //namespace

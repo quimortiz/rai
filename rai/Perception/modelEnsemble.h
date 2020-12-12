@@ -12,7 +12,7 @@
 #include "../Algo/dataNeighbored.h"
 #include "../Gui/opengl.h"
 
-struct ModelEnsemble :GLDrawer {
+struct ModelEnsemble : rai::GLDrawer {
   rai::Array<MinEigModel*> models;
 
   arr vert;
@@ -24,7 +24,7 @@ struct ModelEnsemble :GLDrawer {
   void reestimateVert();
   void reoptimizeModels(DataNeighbored& data);
 
-  void glDraw(OpenGL&);
+  void glDraw(rai::OpenGL&);
 
   void report(ostream& os=cout, bool mini=true);
 };

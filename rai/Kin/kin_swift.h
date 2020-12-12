@@ -12,6 +12,8 @@
 
 class SWIFT_Scene;
 
+namespace rai {
+
 /// contains all information necessary to communicate with swift
 struct SwiftInterface {
   SWIFT_Scene* scene;
@@ -42,3 +44,5 @@ struct SwiftInterface {
   void swiftQueryExactDistance();
   uint countObjects();
 };
+
+} //namespace

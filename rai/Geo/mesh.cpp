@@ -20,6 +20,12 @@
 #  include <GL/gl.h>
 #endif
 
+#ifdef RAI_Lewiner
+#  include "Lewiner/MarchingCubes.h"
+#endif
+
+namespace rai {
+
 bool orsDrawWires=false;
 
 bool Geo_mesh_drawColors=true;
@@ -1785,7 +1791,6 @@ double GJK_distance(rai::Mesh& mesh1, rai::Mesh& mesh2,
 //
 
 #ifdef RAI_Lewiner
-#  include "Lewiner/MarchingCubes.h"
 
 void rai::Mesh::setImplicitSurface(ScalarFunction f, double lo, double hi, uint res) {
   MarchingCubes mc(res, res, res);
@@ -2134,3 +2139,4 @@ void rai::Mesh::supportMargin(uintA& verts, const arr& dir, double margin, int i
   }
 }
 
+} //namespace

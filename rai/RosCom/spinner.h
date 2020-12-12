@@ -10,7 +10,7 @@
 
 #include "../Core/thread.h"
 
-struct RosCom_Spinner : Thread {
+struct RosCom_Spinner : rai::Thread {
   bool useRos;
   RosCom_Spinner(const char* nodeName="RAInode");
   ~RosCom_Spinner();

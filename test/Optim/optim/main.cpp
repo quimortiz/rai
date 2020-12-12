@@ -32,7 +32,7 @@ void TEST(SqrProblem) {
 
   arr path = catCol(S.getTrace_x(), S.getTrace_costs());
   path.writeRaw(FILE("z.path"));
-  gnuplot("load 'plt'", false, true);
+  rai::gnuplot("load 'plt'", false, true);
   rai::wait();
 }
 

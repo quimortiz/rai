@@ -11,6 +11,8 @@
 #include "../Core/thread.h"
 #include "../Geo/geo.h"
 
+namespace rai {
+
 struct Depth2PointCloud : Thread {
   //inputs
   Var<floatA> depth;
@@ -36,3 +38,4 @@ void depthData2point(arr& pt, const arr& Fxypxy);
 void depthData2pointCloud(arr& pts, const floatA& depth, float fx, float fy, float px, float py);
 void depthData2pointCloud(arr& pts, const floatA& depth, const arr& Fxypxy);
 
+} //namespace

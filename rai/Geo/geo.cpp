@@ -181,12 +181,12 @@ arr Vector::generateOrthonormalSystemMatrix() const {
 
 //{ I/O
 void Vector::write(std::ostream& os) const {
-  if(!rai::IOraw) os <<'[' <<x <<", " <<y <<", " <<z <<']';
+  if(!IOraw) os <<'[' <<x <<", " <<y <<", " <<z <<']';
   else os <<' ' <<x <<", " <<y <<' ' <<z;
 }
 
 void Vector::read(std::istream& is) {
-  if(!rai::IOraw) is >>PARSE("(") >>x >>y >>z >>PARSE(")");
+  if(!IOraw) is >>PARSE("(") >>x >>y >>z >>PARSE(")");
   else is >>x >>y >>z;
 }
 //}
@@ -588,7 +588,7 @@ void Quaternion::set(double _w, double _x, double _y, double _z) { w=_w; x=_x; y
 void Quaternion::setZero() { memset(this, 0, sizeof(Quaternion));  w=1.; isZero=true; }
 
 /// samples the rotation uniformly from the whole SO(3)
-rai::Quaternion& Quaternion::setRandom() {
+Quaternion& Quaternion::setRandom() {
   double s, s1, s2, t1, t2;
   s=rnd.uni();
   s1=sqrt(1-s);
@@ -946,7 +946,7 @@ void Quaternion::applyOnPointArray(arr& pts) {
 /// this is a 3-by-4 matrix $J$, giving the angular velocity vector $w = J \dot q$  induced by a $\dot q$
 arr Quaternion::getJacobian() const {
   arr J(3, 4);
-  rai::Quaternion e;
+  Quaternion e;
   for(uint i=0; i<4; i++) {
     if(i==0) e.set(1., 0., 0., 0.);
     if(i==1) e.set(0., 1., 0., 0.);
@@ -1000,7 +1000,7 @@ arr Quaternion::getQuaternionMultiplicationMatrix() const{
 
 void Quaternion::writeNice(std::ostream& os) const { os <<"Quaternion: " <<getDeg() <<" around " <<getVec() <<"\n"; }
 void Quaternion::write(std::ostream& os) const {
-  if(!rai::IOraw) os <<'[' <<w <<", " <<x <<", " <<y <<", " <<z <<']';
+  if(!IOraw) os <<'[' <<w <<", " <<x <<", " <<y <<", " <<z <<']';
   else os <<' ' <<w <<' ' <<x <<' ' <<y <<' ' <<z;
 }
 void Quaternion::read(std::istream& is) { is >>PARSE("(") >>w >>x >>y  >>z >>PARSE(")"); normalize();}
@@ -1143,8 +1143,8 @@ double quat_scalarProduct(const Quaternion& a, const Quaternion& b) {
 }
 
 void quat_concat(arr& y, arr& Ja, arr& Jb, const arr& A, const arr& B) {
-  rai::Quaternion a(A);
-  rai::Quaternion b(B);
+  Quaternion a(A);
+  Quaternion b(B);
   a.isZero=b.isZero=false;
   y = (a * b).getArr4d();
   if(!!Ja) {
@@ -1182,7 +1182,7 @@ void quat_normalize(arr& y, arr& J, const arr& a) {
 }
 
 void quat_getVec(arr& y, arr& J, const arr& A) {
-  rai::Quaternion a(A);
+  Quaternion a(A);
   y.resize(3);
   double phi, sinphi, s;
   double dphi, dsinphi, ds=0.;
@@ -1243,7 +1243,7 @@ void quat_diffVector(arr& y, arr& Ja, arr& Jb, const arr& a, const arr& b) {
 //==============================================================================
 
 /// initialize by reading from the string
-Transformation& Transformation::setText(const char* txt) { read(rai::String(txt).stream()); return *this; }
+Transformation& Transformation::setText(const char* txt) { read(String(txt).stream()); return *this; }
 
 bool Transformation::operator!() const { return this==&NoTransformation; }
 
@@ -1526,7 +1526,7 @@ void Transformation::read(std::istream& is) {
 //==============================================================================
 
 /// initialize by reading from the string
-DynamicTransformation& DynamicTransformation::setText(const char* txt) { read(rai::String(txt)()); return *this; }
+DynamicTransformation& DynamicTransformation::setText(const char* txt) { read(String(txt)()); return *this; }
 
 /// resets the position to origin, rotation to identity, velocities to zero, scale to unit
 DynamicTransformation& DynamicTransformation::setZero() {

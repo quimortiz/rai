@@ -5,23 +5,23 @@
 #include <Gui/opengl.h>
 #include <Geo/qhull.h>
 
-void drawInit(void*, OpenGL& gl){
-  glStandardLight(nullptr, gl);
-  glDrawAxes(1.);
-  glColor(1.,.5,0.);
+void drawInit(void*, rai::OpenGL& gl){
+  rai::glStandardLight(nullptr, gl);
+  rai::glDrawAxes(1.);
+  rai::glColor(1.,.5,0.);
 }
 
 //===========================================================================
 
-extern bool orsDrawWires;
+namespace rai { extern bool orsDrawWires; }
 
 void TEST(Sphere) {
   rai::Mesh mesh;
 
-  OpenGL gl;
+  rai::OpenGL gl;
   gl.add(drawInit,0);
   gl.add(mesh);
-  orsDrawWires=true;
+  rai::orsDrawWires=true;
 
   //MeshSetTetrahedron(mesh);
   //MeshSetOctahedron(mesh);
@@ -47,9 +47,9 @@ void TEST(Sphere) {
 
 void TEST(Meshes) {
   if(!rai::FileToken("../../../../rai-robotModels/pr2/head_v0/head_pan.stl", false).exists()) return;
-  OpenGL gl;
+  rai::OpenGL gl;
   rai::Mesh mesh;
-  mesh.readStlFile(FILE("../../../../rai-robotModels/pr2/head_v0/head_pan.stl"));
+  mesh.readFile("../../../../rai-robotModels/pr2/head_v0/head_pan.stl");
   gl.add(drawInit,0);
   gl.add(mesh);
   gl.watch();
@@ -70,7 +70,7 @@ void TEST(Meshes) {
 void TEST(Meshes2) {
   if(!rai::FileToken("../../../../rai-robotModels/pr2/head_v0/head_pan.stl", false).exists()) return;
   rai::Mesh mesh1,mesh2;
-  OpenGL gl;
+  rai::OpenGL gl;
   gl.add(drawInit,0);
   gl.add(mesh1);
   mesh1.readTriFile(FILE("z.e3.tri"));
@@ -89,7 +89,7 @@ void TEST(Meshes2) {
 void TEST(Meshes3) {
   if(!rai::FileToken("../../../../rai-robotModels/pr2/head_v0/head_pan.stl", false).exists()) return;
   rai::Mesh mesh;
-  OpenGL gl;
+  rai::OpenGL gl;
   gl.add(drawInit,0);
   gl.add(mesh);
   //MeshSetSphere(mesh,0);
@@ -180,14 +180,14 @@ void TEST(DistanceFunctions) {
   rai::Transformation t;
   t.setRandom();
   rai::Mesh m;
-  OpenGL gl;
-  gl.add(glStandardScene,nullptr);
+  rai::OpenGL gl;
+  gl.add(rai::glStandardScene,nullptr);
   gl.add(m);
 
   rai::Array<ScalarFunction*> fcts = {
-    new DistanceFunction_Sphere(t, 1.),
-    new DistanceFunction_Box(t, 1., 2., 3., 1.),
-    new DistanceFunction_Cylinder(t, 1., 2.)
+    new rai::DistanceFunction_Sphere(t, 1.),
+    new rai::DistanceFunction_Box(t, 1., 2., 3., 1.),
+    new rai::DistanceFunction_Cylinder(t, 1., 2.)
   };
 
   for(ScalarFunction* f: fcts){
@@ -220,19 +220,19 @@ void TEST(DistanceFunctions2) {
     rndUniform(x, -5., 5.);
 
     bool suc=true;
-    suc &= checkGradient(DistanceFunction_SSBox, x, 1e-6);
-//    suc &= checkHessian(DistanceFunction_SSBox, x, 1e-6);
+    suc &= checkGradient(rai::DistanceFunction_SSBox, x, 1e-6);
+//    suc &= checkHessian(rai::DistanceFunction_SSBox, x, 1e-6);
     if(!suc){
       arr g,H;
-      cout <<"f=" <<DistanceFunction_SSBox(g,H,x); //set breakpoint here;
+      cout <<"f=" <<rai::DistanceFunction_SSBox(g,H,x); //set breakpoint here;
       HALT("x=" <<x);
     }
   }
 
   //-- display
   rai::Mesh m;
-  m.setImplicitSurface(DistanceFunction_SSBox,-10.,10.,100);
-  OpenGL gl;
+  m.setImplicitSurface(rai::DistanceFunction_SSBox,-10.,10.,100);
+  rai::OpenGL gl;
   gl.add(m);
   gl.watch();
 
@@ -276,8 +276,8 @@ ScalarFunction cylinder = [](arr&,arr&, const arr& X){
 
 void TEST(SimpleImplicitSurfaces) {
   rai::Mesh m;
-  OpenGL gl;
-  gl.add(glStandardScene,nullptr);
+  rai::OpenGL gl;
+  gl.add(rai::glStandardScene,nullptr);
   gl.add(m);
 
   rai::Array<ScalarFunction*> fcts = {&blobby, &sphere, &torus, &cylinder};

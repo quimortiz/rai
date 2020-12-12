@@ -17,7 +17,7 @@ void testPushes(){
   //rai::Simulation S(C, S._physx, true);
 
   double tau=.01;
-  Metronome tic(tau);
+  rai::Metronome tic(tau);
   byteA rgb;
   floatA depth;
 
@@ -68,7 +68,7 @@ void testGrasp(){
   byteA rgb;
   floatA depth;
   double tau=.01;
-  Metronome tic(tau);
+  rai::Metronome tic(tau);
 
   for(uint t=0;;t++){
     tic.waitForTic();
@@ -177,7 +177,7 @@ void makeRndScene(){
   byteA rgb;
   floatA depth;
   double tau=.01;
-  Metronome tic(tau);
+  rai::Metronome tic(tau);
 
   for(uint t=0;t<300;t++){
     tic.waitForTic();
@@ -217,7 +217,7 @@ void testFriction(){
   S.cameraview().addSensor("camera");
 
   double tau=.01;
-  Metronome tic(tau);
+  rai::Metronome tic(tau);
 
   int ppmCount=0;
   rai::system("mkdir -p z.vid/; rm -f z.vid/*.ppm");
@@ -253,7 +253,7 @@ void testStackOfBlocks(){
   //rai::Simulation S(C, S._physx, true);
 
   double tau=.01;  //jumps a bit for tau=.01
-  Metronome tic(tau);
+  rai::Metronome tic(tau);
 
   for(uint t=0;t<4./tau;t++){
     tic.waitForTic();

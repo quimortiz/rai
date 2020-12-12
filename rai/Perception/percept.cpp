@@ -147,7 +147,7 @@ void PercPlane::syncWith(rai::Configuration& K) {
   body->shape->mesh() = hull;
 }
 
-void PercPlane::glDraw(OpenGL& gl) {
+void PercPlane::glDraw(rai::OpenGL& gl) {
   hull.glDraw(gl);
 
 //  if(hull.C.N==3){
@@ -162,7 +162,7 @@ void PercPlane::glDraw(OpenGL& gl) {
   glRotatef(-90.f, 0.f, 1.f, 0.f);
   glLineWidth(3.f);
   glScalef(.1, .1, .1);
-  glDrawAxis();
+  rai::glDrawAxis();
 //  glPopMatrix();
   glLineWidth(1.f);
 }
@@ -220,11 +220,11 @@ void PercBox::syncWith(rai::Configuration& K) {
   body->shape->mesh().C = color;
 }
 
-void PercBox::glDraw(OpenGL&) {
+void PercBox::glDraw(rai::OpenGL&) {
   CHECK(size.N==3 || size.N==4, "");
-  glDrawAxes(.1);
+  rai::glDrawAxes(.1);
   glLineWidth(3);
-  glDrawBox(size.elem(0), size.elem(1), size.elem(2), true);
+  rai::glDrawBox(size.elem(0), size.elem(1), size.elem(2), true);
 }
 
 //============================================================================

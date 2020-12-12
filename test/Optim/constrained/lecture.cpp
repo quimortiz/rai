@@ -51,7 +51,7 @@ void testConstraint(MathematicalProgram& p, uint dim_x, arr& x_start=NoArr, uint
     if(x.N==2){
       displayFunction(lag);
       rai::wait();
-      gnuplot("load 'plt'", false, true);
+      rai::gnuplot("load 'plt'", false, true);
       rai::wait();
     }
 
@@ -67,7 +67,7 @@ void testConstraint(MathematicalProgram& p, uint dim_x, arr& x_start=NoArr, uint
 
     system("cat z.opt >> z.opt_all");
     if(x.N==2){
-      gnuplot("load 'plt'", false, true);
+      rai::gnuplot("load 'plt'", false, true);
       rai::wait();
     }
 
@@ -91,7 +91,7 @@ void testConstraint(MathematicalProgram& p, uint dim_x, arr& x_start=NoArr, uint
   cout <<std::setprecision(6) <<"\nf(x)=" <<lag.get_costs() <<"\nx_opt=" <<x <<"\nlambda=" <<lag.lambda <<endl;
 
   system("mv z.opt_all z.opt");
-  if(x.N==2) gnuplot("load 'plt'", false, true);
+  if(x.N==2) rai::gnuplot("load 'plt'", false, true);
 
   if(!!x_start) x_start = x;
 }

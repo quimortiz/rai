@@ -404,8 +404,8 @@ void TEST(FollowRedundantSequence){
   rai::Frame *endeff = G.getFrame("arm7");
   G.kinematicsPos(y, NoArr, endeff, rel);
   for(t=0;t<T;t++) Z[t]() += y; //adjust coordinates to be inside the arm range
-  plot->Line(Z);
-  G.gl()->add(plot()());
+  rai::plot->Line(Z);
+  G.gl()->add(rai::plot()());
   G.watch(false);
   //-- follow the trajectory kinematically
   for(t=0;t<T;t++){

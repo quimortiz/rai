@@ -93,7 +93,7 @@ void TEST(Paths){
 }
 
 void TEST(Inotify){
-  Inotify I(".");
+  rai::Inotify I(".");
   for(uint i=0;i<3;i++){
     rai::wait(1.);
     I.poll(false, true);

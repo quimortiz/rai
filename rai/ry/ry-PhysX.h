@@ -10,4 +10,6 @@
 
 #include <memory>
 
-struct PhysXInterface;
+namespace rai {
+  struct PhysXInterface;
+}

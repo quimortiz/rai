@@ -26,6 +26,8 @@ typedef struct dxGeom* dGeomID;
 typedef struct dxJoint* dJointID;
 typedef struct dxJointGroup* dJointGroupID;
 
+namespace rai {
+
 /** A trivial interface to the Open Dynamic Engine library.
  *
  * It basically contains a dSpace and dWorld, provides a proximity
@@ -103,3 +105,5 @@ struct OdeInterface {
   bool inFloorContacts(rai::Vector& x);
   void pushPoseForShape(rai::Shape* s);
 };
+
+} //namespace

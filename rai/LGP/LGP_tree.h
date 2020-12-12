@@ -11,14 +11,17 @@
 #include "LGP_node.h"
 #include "../Core/thread.h"
 
-struct KinPathViewer;
+namespace rai {
+  struct KinPathViewer;
+}
+
 struct LGP_Tree;
 struct DisplayThread;
 typedef rai::Array<rai::Transformation> TransformationA;
 
 void initFolStateFromKin(FOL_World& L, const rai::Configuration& K);
 
-struct LGP_Tree_SolutionData : GLDrawer {
+struct LGP_Tree_SolutionData : rai::GLDrawer {
   LGP_Tree& tree;
   LGP_Node* node; ///< contains costs, constraints, and solutions for each level
   rai::String decisions;
@@ -30,10 +33,10 @@ struct LGP_Tree_SolutionData : GLDrawer {
   LGP_Tree_SolutionData(LGP_Tree& _tree, LGP_Node* _node);
 
   void write(ostream& os) const;
-  void glDraw(struct OpenGL& gl);
+  void glDraw(rai::OpenGL& gl);
 };
 
-struct LGP_Tree : GLDrawer {
+struct LGP_Tree : rai::GLDrawer {
   int verbose;
   uint numSteps;
   ofstream fil;
@@ -51,7 +54,7 @@ struct LGP_Tree : GLDrawer {
 
   KOMO finalGeometryObjectives;
 
-  rai::Array<std::shared_ptr<KinPathViewer>> views; //displays for the 3 different levels
+  rai::Array<std::shared_ptr<rai::KinPathViewer>> views; //displays for the 3 different levels
 
   //-- these are lists or queues; I don't maintain them sorted because their evaluation (e.g. f(n)=g(n)+h(n)) changes continuously
   // while new bounds are computed. Therefore, whenever I pop from these lists, I find the minimum w.r.t. a heuristic. The
@@ -65,7 +68,7 @@ struct LGP_Tree : GLDrawer {
   LGP_NodeL fringe_path;  //list of terminal nodes that have been seq tested
   LGP_NodeL fringe_solved;  //list of terminal nodes that have been path tested
 
-  Var<rai::Array<LGP_Tree_SolutionData*>> solutions;
+  rai::Var<rai::Array<LGP_Tree_SolutionData*>> solutions;
 
   //high-level
   LGP_Tree();
@@ -105,7 +108,7 @@ struct LGP_Tree : GLDrawer {
   void updateDisplay();
   void renderToVideo(int specificBound=-1, const char* filePrefix="vid/");
   void writeNodeList(ostream& os=cout);
-  void glDraw(struct OpenGL& gl);
+  void glDraw(rai::OpenGL& gl);
 
   //-- kind of a gui:
   void printChoices();
@@ -118,7 +121,7 @@ struct LGP_Tree : GLDrawer {
   void player(StringA cmds= {});
 };
 
-struct LGP_Tree_Thread : LGP_Tree, Thread {
+struct LGP_Tree_Thread : LGP_Tree, rai::Thread {
   LGP_Tree_Thread(const rai::Configuration& _kin, const char* folFileName="fol.g")
     : LGP_Tree(_kin, folFileName), Thread("LGP_Tree", -1) {}
 

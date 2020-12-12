@@ -14,7 +14,9 @@ namespace physx {
 class PxMaterial;
 }
 
-struct PhysXInterface : GLDrawer {
+namespace rai {
+
+struct PhysXInterface : rai::GLDrawer {
   struct PhysXInterface_self* self=0;
 
   PhysXInterface(const rai::Configuration& C, int verbose=1);
@@ -37,3 +39,5 @@ struct PhysXInterface : GLDrawer {
   void addForce(rai::Vector& force, rai::Frame* b);
   void addForce(rai::Vector& force, rai::Frame* b, rai::Vector& pos);
 };
+
+} //namespace

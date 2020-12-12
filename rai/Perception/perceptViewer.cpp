@@ -10,7 +10,7 @@
 #include "../Gui/opengl.h"
 #include "../Kin/frame.h"
 
-PerceptViewer::PerceptViewer(Var<PerceptL>& _percepts, Var<rai::Configuration> _kin)
+PerceptViewer::PerceptViewer(rai::Var<PerceptL>& _percepts, rai::Var<rai::Configuration> _kin)
   : Thread(STRING("PercViewer_"<<_percepts.name()), -1.),
     percepts(this, _percepts, true),
     kin(this, _kin, false) {
@@ -21,23 +21,23 @@ PerceptViewer::~PerceptViewer() {
   threadClose();
 }
 
-void glDrawPercepts(void* P, OpenGL&) {
+void glDrawPercepts(void* P, rai::OpenGL&) {
   PerceptL& percepts = *((PerceptL*)P);
   for(std::shared_ptr<Percept>& p:percepts) {
     glTransform(p->pose);
     glPushMatrix();
-    p->glDraw(NoOpenGL);
+    p->glDraw(rai::NoOpenGL);
     glPopMatrix();
     glTranslated(p->com.x, p->com.y, p->com.z);
     glColor3f(0, 0, 0);
-    glDrawText(STRING(p->id), 0, 0, 0, true);
+    rai::glDrawText(STRING(p->id), 0, 0, 0, true);
     glColor3f(0, 1, 0);
   }
 }
 
 void PerceptViewer::open() {
-  gl = new OpenGL(STRING("PercViewer "<<percepts.name()));
-  gl->add(glStandardScene);
+  gl = new rai::OpenGL(STRING("PercViewer "<<percepts.name()));
+  gl->add(rai::glStandardScene);
 //  gl->add(glDrawMeshes, &modelCopy);
   gl->add(glDrawPercepts, &copy);
 

@@ -14,9 +14,9 @@
 #include "../Kin/kin.h"
 #include "ctrlMsg.h"
 
-struct RTControllerSimulation : Thread {
-  Var<CtrlMsg> ctrl_ref;
-  Var<CtrlMsg> ctrl_obs;
+struct RTControllerSimulation : rai::Thread {
+  rai::Var<CtrlMsg> ctrl_ref;
+  rai::Var<CtrlMsg> ctrl_obs;
   //Var<rai::Configuration> modelWorld;
 
   rai::Configuration* world;
@@ -33,8 +33,8 @@ struct RTControllerSimulation : Thread {
   arr I_term;
 
   RTControllerSimulation(const rai::Configuration& realWorld,
-                         const Var<CtrlMsg>& _ctrl_ref,
-                         const Var<CtrlMsg>& _ctrl_obs,
+                         const rai::Var<CtrlMsg>& _ctrl_ref,
+                         const rai::Var<CtrlMsg>& _ctrl_obs,
                          double tau=0.01, bool gravity=false, double _systematicErrorSdv=0.);
   virtual ~RTControllerSimulation() {}
 

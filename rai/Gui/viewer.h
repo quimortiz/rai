@@ -10,8 +10,10 @@
 
 #include "../Core/thread.h"
 
-namespace rai { struct Mesh; }
-typedef rai::Array<rai::Mesh> MeshA;
+namespace rai {
+
+struct Mesh;
+typedef Array<Mesh> MeshA;
 
 struct ImageViewer : Thread {
   unique_ptr<struct sImageViewer> self;
@@ -87,3 +89,5 @@ struct PlotViewer : Thread, GLDrawer {
   void close();
   void glDraw(struct OpenGL&);
 };
+
+} //namespace

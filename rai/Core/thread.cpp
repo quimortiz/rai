@@ -25,6 +25,8 @@
 #endif
 #include <errno.h>
 
+namespace rai {
+
 //===========================================================================
 
 template<> const char* rai::Enum<ActStatus>::names []= {
@@ -379,14 +381,14 @@ MiniThread::MiniThread(const char* _name) : Signaler(tsIsClosed), name(_name) {
 }
 
 MiniThread::~MiniThread() {
-    if (thread){
-        std::cerr << "Call 'threadClose()' in the destructor of the DERIVED class! \
-           That's because the 'virtual table is destroyed' before calling the destructor ~Thread (google 'call virtual function\
+  if (thread){
+    std::cerr << "Call 'threadClose()' in the destructor of the DERIVED class! \
+           That's because the 'virtual table is destroyed' before calling the destructor ~Thread (google 'call virtual function	\
            in destructor') but now the destructor has to call 'threadClose' which triggers a Thread::close(), which is\
            pure virtual while you're trying to call ~Thread." << endl;
     exit(1);
-}
   }
+}
 
 void MiniThread::threadClose(double timeoutForce) {
 //  stopListening();
@@ -676,8 +678,10 @@ int _allPositive(const VarL& signalers, int whoChanged) {
   return AS_false;
 }
 
+} //namespace
+
 RUN_ON_INIT_BEGIN(thread)
-rai::Array<ptr<Var_base>*>::memMove=true;
-ThreadL::memMove=true;
-SignalerL::memMove=true;
+rai::Array<ptr<rai::Var_base>*>::memMove=true;
+rai::ThreadL::memMove=true;
+rai::SignalerL::memMove=true;
 RUN_ON_INIT_END(thread)

@@ -11,12 +11,12 @@
 #include "geo.h"
 #include "../Core/array.h"
 
-namespace rai { struct Mesh; }
+namespace rai {
+
+struct Mesh;
 typedef rai::Array<rai::Mesh> MeshA;
 typedef rai::Array<rai::Mesh*> MeshL;
-void glDrawMeshes(void*, OpenGL&);
-
-namespace rai {
+void glDrawMeshes(void*, rai::OpenGL&);
 
 enum ShapeType { ST_none=-1, ST_box=0, ST_sphere, ST_capsule, ST_mesh, ST_cylinder, ST_marker, ST_pointCloud, ST_ssCvx, ST_ssBox, ST_ssBoxElip };
 
@@ -136,7 +136,6 @@ struct MeshCollection : GLDrawer {
   arr X;
   void glDraw(struct OpenGL&);
 };
-} //END of namespace
 
 //===========================================================================
 
@@ -193,3 +192,5 @@ double GJK_sqrDistance(const rai::Mesh& mesh1, const rai::Mesh& mesh2,
                        rai::Vector& p1, rai::Vector& p2,
                        rai::Vector& e1, rai::Vector& e2,
                        GJK_point_type& pt1, GJK_point_type& pt2);
+
+} //namespace

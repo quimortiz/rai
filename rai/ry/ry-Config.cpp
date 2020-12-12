@@ -511,8 +511,8 @@ allows you to control robot motors by position, velocity, or accelerations, \
 //===========================================================================
 
 //  pybind11::class_<ry::ConfigViewer>(m, "ConfigViewer");
-  pybind11::class_<ImageViewerCallback, shared_ptr<ImageViewerCallback>>(m, "ImageViewer");
-  pybind11::class_<PointCloudViewerCallback, shared_ptr<PointCloudViewerCallback>>(m, "PointCloudViewer");
+  pybind11::class_<rai::ImageViewerCallback, shared_ptr<rai::ImageViewerCallback>>(m, "ImageViewer");
+  pybind11::class_<rai::PointCloudViewerCallback, shared_ptr<rai::PointCloudViewerCallback>>(m, "PointCloudViewer");
 
 
 //===========================================================================
@@ -574,15 +574,15 @@ allows you to control robot motors by position, velocity, or accelerations, \
   })
 
   .def("pointCloudViewer", [](ry::RyCameraView& self) {
-    return make_shared<PointCloudViewerCallback>(self.pts, self.image);
+    return make_shared<rai::PointCloudViewerCallback>(self.pts, self.image);
   })
 
   .def("imageViewer", [](ry::RyCameraView& self) {
-    return make_shared<ImageViewerCallback>(self.image);
+    return make_shared<rai::ImageViewerCallback>(self.image);
   })
 
   .def("segmentationViewer", [](ry::RyCameraView& self) {
-    return make_shared<ImageViewerCallback>(self.segmentation);
+    return make_shared<rai::ImageViewerCallback>(self.segmentation);
   })
   ;
 

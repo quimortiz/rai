@@ -116,7 +116,8 @@ void init_KOMO(pybind11::module& m) {
        pybind11::arg("endTime"),
        pybind11::arg("prevFromFrame"),
        pybind11::arg("fromFrame"),
-       pybind11::arg("toFrame")
+       pybind11::arg("toFrame"),
+       pybind11::arg("firstSwitch")=true
        )
 
   .def("addSwitch_magic", &KOMO::addSwitch_magic)
@@ -239,7 +240,7 @@ void init_KOMO(pybind11::module& m) {
   ENUMVAL(SY, dynamic)
   ENUMVAL(SY, dynamicOn)
   ENUMVAL(SY, dynamicTrans)
-  ENUMVAL(SY, liftDownUp)
+//  ENUMVAL(SY, liftDownUp)
 
   ENUMVAL(SY, contact)
   ENUMVAL(SY, bounce)

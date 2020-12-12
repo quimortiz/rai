@@ -11,14 +11,18 @@
 #include "percept.h"
 #include "../Core/thread.h"
 
-struct PerceptViewer : Thread {
-  Var<PerceptL> percepts;
-  Var<rai::Configuration> kin;
-  PerceptL copy;
-  MeshA modelCopy;
-  struct OpenGL* gl;
+namespace rai {
+  struct OpenGL;
+}
 
-  PerceptViewer(Var<PerceptL>& _percepts, Var<rai::Configuration> _kin);
+struct PerceptViewer : rai::Thread {
+  rai::Var<PerceptL> percepts;
+  rai::Var<rai::Configuration> kin;
+  PerceptL copy;
+  rai::MeshA modelCopy;
+  rai::OpenGL* gl;
+
+  PerceptViewer(rai::Var<PerceptL>& _percepts, rai::Var<rai::Configuration> _kin);
   ~PerceptViewer();
   void open();
   void step();

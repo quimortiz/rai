@@ -12,16 +12,16 @@
 
 //===========================================================================
 
-ActStatus CtrlTarget_Const::step(double tau, CtrlObjective* o, const arr& y_real) {
+rai::ActStatus CtrlTarget_Const::step(double tau, CtrlObjective* o, const arr& y_real) {
   o->feat->target.clear();
-  return AS_running;
+  return rai::AS_running;
 }
 
 //===========================================================================
 
-ActStatus CtrlTarget_ConstVel::step(double tau, CtrlObjective* o, const arr& y_real) {
+rai::ActStatus CtrlTarget_ConstVel::step(double tau, CtrlObjective* o, const arr& y_real) {
   o->feat->target.clear();
-  return AS_running;
+  return rai::AS_running;
 }
 
 //===========================================================================
@@ -49,7 +49,7 @@ arr undoScaling(shared_ptr<Feature>& f, const arr& y_real) {
   return y_raw;
 }
 
-ActStatus CtrlTarget_MaxCarrot::step(double tau, CtrlObjective* o, const arr& y_real) {
+rai::ActStatus CtrlTarget_MaxCarrot::step(double tau, CtrlObjective* o, const arr& y_real) {
   arr y_real_cut = y_real;
   if(o->type==OT_ineq) for(double& d:y_real_cut) if(d<0.) d=0.;
 
@@ -74,8 +74,8 @@ ActStatus CtrlTarget_MaxCarrot::step(double tau, CtrlObjective* o, const arr& y_
     cout <<"GOAL:" <<goal <<" target:" <<o->feat->target <<endl;
   }
   if(goalDistance<maxDistance) countInGoalRange++; else countInGoalRange=0;
-  if(countInGoalRange>10) return AS_converged;
-  return AS_running;
+  if(countInGoalRange>10) return rai::AS_converged;
+  return rai::AS_running;
 }
 
 //===========================================================================
@@ -93,7 +93,7 @@ CtrlTarget_PathCarrot::CtrlTarget_PathCarrot(const arr& path, double maxDistance
   spline.set(2, path, times);
 }
 
-ActStatus CtrlTarget_PathCarrot::step(double tau, CtrlObjective* o, const arr& y_real) {
+rai::ActStatus CtrlTarget_PathCarrot::step(double tau, CtrlObjective* o, const arr& y_real) {
   if(time+tau > endTime) tau = endTime - time;
 
   arr y_raw = undoScaling(o->feat, y_real);
@@ -127,22 +127,22 @@ ActStatus CtrlTarget_PathCarrot::step(double tau, CtrlObjective* o, const arr& y
   time += tau;
   o->feat->target = goal;
 
-  if(time>=endTime && countInRange>10) return AS_converged;
-  return AS_running;
+  if(time>=endTime && countInRange>10) return rai::AS_converged;
+  return rai::AS_running;
 }
 
 //===========================================================================
 
-ActStatus CtrlTarget_Sine::step(double tau, CtrlObjective* o, const arr& y_real) {
+rai::ActStatus CtrlTarget_Sine::step(double tau, CtrlObjective* o, const arr& y_real) {
   t+=tau;
   if(t>T) t=T;
   if(y_start.N!=y_real.N) y_start=y_real; //initialization
   if(y_target.N!=y_real.N) y_target = y_start;
   o->feat->target = y_start + (.5*(1.-cos(RAI_PI*t/T))) * (y_target - y_start);
   y_err = o->feat->target - y_real;
-  if(t>=T-1e-6/* && length(y_err)<1e-3*/) return AS_done;
+  if(t>=T-1e-6/* && length(y_err)<1e-3*/) return rai::AS_done;
 //  return t>=T && length(y_err)<1e-3;
-  return AS_running;
+  return rai::AS_running;
 }
 
 //===========================================================================
@@ -200,7 +200,7 @@ void getVel_bang(double& x, double& v, double maxVel, double tau) {
   }
 }
 
-ActStatus CtrlTarget_Bang::step(double tau, CtrlObjective* o, const arr& y_real) {
+rai::ActStatus CtrlTarget_Bang::step(double tau, CtrlObjective* o, const arr& y_real) {
   //only on initialization the true state is used; otherwise ignored!
 //  if(y_target.N!=y_real.N) { y_target=y_real; }
 
@@ -224,12 +224,12 @@ ActStatus CtrlTarget_Bang::step(double tau, CtrlObjective* o, const arr& y_real)
 
   if(maxDiff(y_real, y_target)<tolerance
       && absMax(v_real)<tolerance) {
-    return AS_converged;
+    return rai::AS_converged;
   }
 #else
   NIY
 #endif
-  return AS_running;
+  return rai::AS_running;
 }
 
 //===========================================================================
@@ -271,7 +271,7 @@ void CtrlTarget_PD::setGainsAsNatural(double decayTime, double dampingRatio) {
 //  setGains(rai::sqr(1./lambda), 2.*dampingRatio/lambda);
 }
 
-ActStatus CtrlTarget_PD::step(double tau, CtrlObjective* o, const arr& y_real) {
+rai::ActStatus CtrlTarget_PD::step(double tau, CtrlObjective* o, const arr& y_real) {
   //only on initialization the true state is used; otherwise ignored!
   if(y_ref.N!=y_real.N) { y_ref=y_real; v_ref=zeros(y_real.N); }
   if(y_target.N!=y_ref.N) { y_target=y_ref; v_target=v_ref; }
@@ -291,8 +291,8 @@ ActStatus CtrlTarget_PD::step(double tau, CtrlObjective* o, const arr& y_real) {
 
   o->feat->target = y_ref;
 
-  if(isConverged(-1.)) return AS_converged;
-  return AS_running;
+  if(isConverged(-1.)) return rai::AS_converged;
+  return rai::AS_running;
 }
 
 arr CtrlTarget_PD::getDesiredAcceleration() {

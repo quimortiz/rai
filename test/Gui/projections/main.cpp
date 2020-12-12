@@ -11,18 +11,18 @@ void dot(byteA& img, int I, int J){
 }
 
 void testProjection(){
-  OpenGL gl, gl2;
+  rai::OpenGL gl, gl2;
   gl.camera.zNear = .1;
 
   rai::Mesh M;
   M.setBox();
   M.scale(.4, .5, .6);
 
-  gl.add(glStandardLight);
+  gl.add(rai::glStandardLight);
   gl.add(M);
   gl.update(nullptr, true);
 
-  gl2.add( [&gl,&M](OpenGL &gl2){
+  gl2.add( [&gl,&M](rai::OpenGL &gl2){
     byteA &img = gl2.background;
     img = gl.captureImage;
     flip_image(img);

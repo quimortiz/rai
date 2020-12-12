@@ -34,7 +34,7 @@ arr summarizeErrors(const arr& phi, const ObjectiveTypeA& tt);
  *
  *  Importantly: the Jacobian may be sparse! This allows to implicitly represent structured NLP (in contrast to explicit structure, see below)
  */
-struct MathematicalProgram : NonCopyable {
+struct MathematicalProgram : rai::NonCopyable {
   virtual ~MathematicalProgram() {}
 
   //-- essential methods that need overload
@@ -51,7 +51,7 @@ struct MathematicalProgram : NonCopyable {
   virtual void getFHessian(arr& H, const arr& x) { H.clear(); } //the Hessian of the sum of all f-features (or Hessian in addition to the Gauss-Newton Hessian of all other features)
 
   //-- optional: return some info on the problem and the last evaluation, potentially with display
-  virtual void report(ostream& os, int verbose){ os <<"NLP of type '" <<niceTypeidName(typeid(*this)) <<"' -- no reporting implemented"; }
+  virtual void report(ostream& os, int verbose){ os <<"NLP of type '" <<rai::niceTypeidName(typeid(*this)) <<"' -- no reporting implemented"; }
 };
 
 //===========================================================================

@@ -12,7 +12,6 @@
 #include "../Geo/geo.h"
 #include "../Core/graph.h"
 #include "../Geo/mesh.h"
-#include "../Geo/geoms.h"
 
 /* TODO:
  * replace the types by more fundamental:

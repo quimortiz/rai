@@ -13,9 +13,9 @@ extern bool orsDrawWires;
 
 void TEST(PairCollision){
   uint n=500;
-  MeshA meshes(n);
-  OpenGL gl;
-  gl.add(glStandardScene);
+  rai::MeshA meshes(n);
+  rai::OpenGL gl;
+  gl.add(rai::glStandardScene);
   for(uint i=0;i<n;i++){
     rai::Mesh &m=meshes(i);
     m.setRandom(20);
@@ -32,7 +32,7 @@ void TEST(PairCollision){
   D.setZero();
   rai::timerStart();
   for(uint i=0;i<n;i++) for(uint j=i+1;j<n;j++){
-    PairCollision pc(meshes(i), meshes(j), 0, 0);
+    rai::PairCollision pc(meshes(i), meshes(j), 0, 0);
     D(i,j)=pc.distance;
 //    cout <<pc <<endl;
 //    gl.add(pc);
