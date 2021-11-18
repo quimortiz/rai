@@ -21,11 +21,15 @@ void playFOL(const char* file){
   cout <<"*** initial FOL world:\n";
   cout <<"--- KB graph:\n";
   fol.write(cout);
+  bool write_pddl = false;
   cout <<"\n--- PDDL domain:\n";
-  fol.writePDDLdomain(cout);
-  cout <<"--- PDDL problem:\n";
-  fol.writePDDLproblem(cout);
-  fol.writePDDLfiles("z");
+  if (write_pddl)
+  {
+    fol.writePDDLdomain(cout);
+    cout <<"--- PDDL problem:\n";
+    fol.writePDDLproblem(cout);
+    fol.writePDDLfiles("z");
+  }
 
   for(bool go=true;go;){
     bool terminal = fol.is_terminal_state();
@@ -80,11 +84,15 @@ void playLGP(const char* folFile, const char* confFile){
   cout <<"*** initial FOL world:\n";
   cout <<"--- KB graph:\n";
   lgp.fol.write(cout);
-  cout <<"\n--- PDDL domain:\n";
-  lgp.fol.writePDDLdomain(cout);
-  cout <<"--- PDDL problem:\n";
-  lgp.fol.writePDDLproblem(cout);
-  lgp.fol.writePDDLfiles("z");
+  bool write_pddl=false;
+  if (write_pddl)
+  {
+    cout <<"\n--- PDDL domain:\n";
+    lgp.fol.writePDDLdomain(cout);
+    cout <<"--- PDDL problem:\n";
+    lgp.fol.writePDDLproblem(cout);
+    lgp.fol.writePDDLfiles("z");
+  }
 
 
   if(rai::checkParameter<bool>("solve")){
