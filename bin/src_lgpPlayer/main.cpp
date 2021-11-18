@@ -21,7 +21,7 @@ void playFOL(const char* file){
   cout <<"*** initial FOL world:\n";
   cout <<"--- KB graph:\n";
   fol.write(cout);
-  bool write_pddl = false;
+  bool write_pddl = true;
   cout <<"\n--- PDDL domain:\n";
   if (write_pddl)
   {
@@ -84,7 +84,7 @@ void playLGP(const char* folFile, const char* confFile){
   cout <<"*** initial FOL world:\n";
   cout <<"--- KB graph:\n";
   lgp.fol.write(cout);
-  bool write_pddl=false;
+  bool write_pddl=true;
   if (write_pddl)
   {
     cout <<"\n--- PDDL domain:\n";
@@ -102,8 +102,58 @@ void playLGP(const char* folFile, const char* confFile){
   }
 }
 
+// { [touch, r_gripper, stick1], [stable_, r_gripper, stick1] }
+// { [push_, stick1, ball2] [quasiStaticOn_, table, ball2] }
+// { [stableOn_, table, ball2] }
+// #{ [stable_, table, stick1] [touch, table, stick1] }
+// { [touch, l_gripper, ball2] [stable_, l_gripper, ball2] }
+// { [above, ball2, box1], [stableOn_, box1, ball2] }
+// { [end] }
+
+// with push only in one
+// SKELETON:
+//   [1, 1] push (l_gripper ball2)
+//   [1, 1] touch (l_gripper ball2)
+//   [1, 2] quasiStaticOn (table ball2)
+//   [2, 2] above (ball2 table)
+//   [2, 3] stableOn (table ball2)
+//   [3, 3] touch (r_gripper ball2)
+//   [3, -1] stable (r_gripper ball2)
+
+// [1, 3] push (l_gripper ball2)
+// [1, 1] touch (l_gripper ball2)
+// [1, 2] quasiStaticOn (table ball2)
+// [2, 2] above (ball2 table)
+// [2, 3] stableOn (table ball2)
+// [3, 3] touch (r_gripper ball2)
+// [3, -1] stable (r_gripper ball2)
+
+
+// SKELETON:
+//   [1, 1] touch (r_gripper stick1)
+//   [1, 6] stable (r_gripper stick1)
+//   [2, 3] push (stick1 ball2)
+//   [2, 3] quasiStaticOn (table ball2)
+//   [3, 4] stableOn (table ball2)
+//   [4, 4] touch (l_gripper ball2)
+//   [4, 5] stable (l_gripper ball2)
+//   [5, 5] above (ball2 box1)
+//   [5, 6] stableOn (box1 ball2)
+//   [6, 6] end ()
+
 
 //===========================================================================
+
+// neww
+// SKELETON:
+//   [1, 2] push (l_gripper ball2)
+//   [1, 2] quasiStaticOn (table ball2)
+//   [2, 3] stableOn (table ball2)
+//   [3, 3] touch (r_gripper ball2)
+//   [3, -1] stable (r_gripper ball2)
+
+
+
 
 int main(int argn, char** argv){
   rai::initCmdLine(argn, argv);
