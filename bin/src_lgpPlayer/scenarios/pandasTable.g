@@ -6,9 +6,11 @@ table_base (world) {
     Q:[0 0 .6]
     shape:marker, size:[.03],
 }
+# no collision on talbe
 table (table_base){
     shape:ssBox, Q:[0 0 -.05], size:[3. 2. .1 .02], color:[.3 .3 .3]
-    contact, logical:{is_table}
+    # contact,
+    logical:{is_table}
     friction:.1
 }
 
@@ -19,6 +21,16 @@ Include: 'panda_fixRobotiq.g'
 
 Prefix: "r_"
 Include: 'panda_fixRobotiq.g'
+
+
+## change the gripper to a stick
+
+
+
+
+
+
+
 
 Prefix!
 
