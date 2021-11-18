@@ -19,13 +19,15 @@ is_table
 on
 busy     # involved in an ongoing (durative) activity
 pushing # gripper obj
+is_pushed
 
 INFEASIBLE
 INFEASIBLE_pick
 
 ## KOMO symbols
 above
-
+quasiStaticOn 
+push
 touch
 impulse
 stable
@@ -46,6 +48,7 @@ START_STATE {}
 #####################################################################
 
 ### Reward
+
 REWARD {
 }
 
@@ -53,7 +56,7 @@ REWARD {
 
 DecisionRule pick {
   Obj, From, Hand, 
-  { (gripper Hand) (object Obj) (on From Obj) (busy Hand)! (INFEASIBLE_pick Hand Obj)! }
+  { (gripper Hand) (object Obj) (on From Obj) (busy Hand)! (INFEASIBLE_pick Hand Obj)! (is_pushed Obj)! }
   { (on From Obj)! (above Obj From)! (touch Obj From)! (stable From Obj)! (stableOn From Obj)!
     (on Hand Obj) (busy Hand) #logic
     (touch Hand Obj) (stable Hand Obj)  #geometric
@@ -63,7 +66,7 @@ DecisionRule pick {
 
 DecisionRule pushpick {
   Obj, From, Hand, 
-  { (gripper Hand) (object Obj) (is_table From) (on From Obj) (busy Hand)! (INFEASIBLE_pick Hand Obj)! }
+  { (gripper Hand) (object Obj) (is_table From) (on From Obj) (is_pushed Obj)! (busy Hand)! (INFEASIBLE_pick Hand Obj)! }
   { 
   #(on From Obj)! (above Obj From)! (touch Obj From)!
   (stable From Obj)! (stableOn From Obj)!
@@ -71,7 +74,9 @@ DecisionRule pushpick {
    (pushing Hand Obj) # pushing
    (busy Hand) #logic
    (push Hand Obj) #geometric
-   (quasiStaticOn Hand Obj)  #geometric
+  #(touch Hand Obj) # geo
+   (quasiStaticOn From Obj)  #geometric
+   (is_pushed Obj)
     }
 }
 
@@ -89,6 +94,7 @@ DecisionRule place {
 #####################################################################
 
 #NOTE: i have modified the table!!
+# TODO: while pushed, it can not be picked by the other arm
 
 DecisionRule pushplace {
   Obj, Hand, To,
@@ -96,15 +102,19 @@ DecisionRule pushplace {
   #(on Hand Obj)
   (on To Obj) # the object is already at the table
 (pushing  Hand Obj )
-  (is_table To) }
+  (is_table To)
+  (is_pushed Obj) }
   { (busy Hand)!
 (pushing  Hand Obj )!
  # (on Hand Obj)!
  # (stable Hand Obj)!
-  (touch Hand Obj)!
-    (on To Obj) #logic
-    (above Obj To) (stableOn To Obj) #geometric
-    (INFEASIBLE_pick ANY Obj)! block(INFEASIBLE_pick ANY Obj)
+ # (touch Hand Obj)!
+  (quasiStaticOn To Obj)!  #geometric
+  (push Hand Obj)! #geometric
+  (on To Obj) #logic
+  (stableOn To Obj) #geometric
+  (INFEASIBLE_pick ANY Obj)! block(INFEASIBLE_pick ANY Obj)
+  (is_pushed Obj)!
     }
 }
 
