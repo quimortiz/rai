@@ -84,7 +84,7 @@ void Skeleton::setFromStateSequence(Array<Graph*>& states, const arr& times){
 
   for(uint i=0; i<S.N; i++) {
     SkeletonEntry& se =  S.elem(i);
-    if(skeletonModes.contains(se.symbol)){ //S(i) is about a switch
+    if(skeletonModes.contains(se.symbol) || se.symbol == SY_push ){ //S(i) is about a switch or a push
       if(se.phase1<times.last()){
         se.phase1 += 1.; //*** MODES EXTEND TO THE /NEXT/ TIME SLICE ***
       }else{
