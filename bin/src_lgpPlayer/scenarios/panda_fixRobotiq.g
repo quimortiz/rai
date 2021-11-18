@@ -31,19 +31,44 @@ Delete palm
 Delete finger1
 Delete finger2
         
-# add robotiq
-Include: '../../../../rai-robotModels/robotiq/robotiq.g'
+
+# add a gripper that can push
+robotiq_base { X:[0 0 1] }
+
+# gripper (robotiq_base){
+#     Q:<d(180 0 1 0) d(90 0 0 1) t(0 0 -.155)>
+#     shape:marker, size:[.03], color:[.9 .9 .9], logical:{gripper:True} }
+
+gripper (robotiq_base){
+ shape:capsule,
+    Q:<d(180 0 1 0) d(90 0 0 1) t(0 0 -.10)>,
+ size:[.2 .02], color:[.6 .6 .6],
+     logical:{gripper:True} }
 Edit robotiq_base (panda_joint8) { Q:[0 0 .050] }
 
-# add extra collision object for panda wrist
-panda_coll7b(panda_joint7)	{ shape:capsule color:[1.,1.,1.,.2] size:[.05 .05] Q:<t(.08 .0 .0) d(45 1 0 0) t(0 0 -.025)>, contact:-2  }
+
+# add robotiq
+# Include: '../../../../rai-robotModels/robotiq/robotiq.g'
+# Edit robotiq_base (panda_joint8) { Q:[0 0 .050] }
+
+# # add extra collision object for panda wrist
+# panda_coll7b(panda_joint7)	{ shape:capsule color:[1.,1.,1.,.2] size:[.05 .05] Q:<t(.08 .0 .0) d(45 1 0 0) t(0 0 -.025)>, contact:-2  }
         
-# kill the finger joint
-Edit panda_joint8 { joint:none }
-Edit finger_joint { joint:none }
-Edit left_inner_knuckle_joint { joint:none }
-Edit right_inner_knuckle_joint { joint:none }
-Edit right_outer_knuckle_joint { joint:none }
-Edit left_inner_finger_joint { joint:none }
-Edit right_inner_finger_joint { joint:none }
-        
+# # kill the finger joint
+# Edit panda_joint8 { joint:none }
+# Edit finger_joint { joint:none }
+# Edit left_inner_knuckle_joint { joint:none }
+# Edit right_inner_knuckle_joint { joint:none }
+# Edit right_outer_knuckle_joint { joint:none }
+# Edit left_inner_finger_joint { joint:none }
+# Edit right_inner_finger_joint { joint:none }
+
+
+
+
+
+
+
+
+
+
