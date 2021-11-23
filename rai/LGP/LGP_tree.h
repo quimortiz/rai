@@ -9,6 +9,7 @@
 #pragma once
 
 #include "LGP_node.h"
+#include <set>
 #include "../Core/thread.h"
 
 struct KinPathViewer;
@@ -40,6 +41,9 @@ struct LGP_Tree : GLDrawer {
   LGP_Node* root=0, *focusNode=0;
   FOL_World fol;
   Configuration kin;
+
+  std::set<std::string> feasible_prefixes;
+  std::set<std::string> infeasible_prefixes;
 
   int verbose;
   uint numSteps;
