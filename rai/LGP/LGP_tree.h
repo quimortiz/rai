@@ -53,6 +53,7 @@ struct LGP_Tree : GLDrawer {
   bool displayTree=true;
   BoundType displayBound=BD_seqPath;
   bool collisions=false;
+  BoundType bound_before_expand = BD_symbolic;
   shared_ptr<DisplayThread> dth;
   shared_ptr<ConfigurationViewer> singleView;
   String dataPath;
