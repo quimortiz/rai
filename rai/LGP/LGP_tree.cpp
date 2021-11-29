@@ -481,18 +481,47 @@ LGP_Node* LGP_Tree::expandNext(int stopOnDepth, LGP_NodeL* addIfTerminal) { //ex
 
   CHECK(n, "");
   if(stopOnDepth>0 && n->step>=(uint)stopOnDepth) return nullptr;
-  n->expand();
-  for(LGP_Node* ch:n->children) {
-    if(ch->isTerminal) {
-      terminals.append(ch);
-      LGP_NodeL path = ch->getTreePath();
-      for(LGP_Node* n:path) if(!n->count(1)) fringe_poseToGoal.setAppend(n); //pose2 is a FIFO
-    } else {
-      fringe_expand.append(ch);
+
+  // check the bound before expand
+  
+  auto bound =  bound_before_expand;
+  bool expand = true;
+  if (bound != BD_symbolic) {
+    try {
+      n->optBound(bound, collisions, verbose-2);
+    } catch(const char* err) {
+      LOG(-1) <<"opt(level=" << bound <<") has failed for the following node:";
+      n->write(cout, false, true);
+      LOG(-3) <<"node optimization failed";
     }
-    if(addIfTerminal && ch->isTerminal) addIfTerminal->append(ch);
-    if(n->count(1)) fringe_pose.append(ch);
+    if(!n->feasible(bound)) {
+      expand = false;
+      infeasible_prefixes.insert ( n->getTreePathString().p );
+    }
+    else {
+      if (bound == BD_path || bound == BD_seqPath )
+      {
+        feasible_prefixes.insert ( n->getTreePathString().p );
+      }
+    }
   }
+
+  if (expand)
+  {
+    n->expand();
+    for(LGP_Node* ch:n->children) {
+      if(ch->isTerminal) {
+        terminals.append(ch);
+        LGP_NodeL path = ch->getTreePath();
+        for(LGP_Node* n:path) if(!n->count(1)) fringe_poseToGoal.setAppend(n); //pose2 is a FIFO
+      } else {
+        fringe_expand.append(ch);
+      }
+      if(addIfTerminal && ch->isTerminal) addIfTerminal->append(ch);
+      if(n->count(1)) fringe_pose.append(ch);
+    }
+  }
+
   return n;
 }
 
