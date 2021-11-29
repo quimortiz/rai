@@ -509,9 +509,17 @@ void LGP_Tree::optBestOnLevel(BoundType bound, LGP_NodeL& drawFringe, BoundType 
     }
 
     if(n->feasible(bound)) {
+      if (bound == BD_path || bound == BD_seqPath )
+      {
+        feasible_prefixes.insert ( n->getTreePathString().p );
+      }
       if(addIfTerminal && n->isTerminal) addIfTerminal->append(n);
       if(addChildren) for(LGP_Node* c:n->children) addChildren->append(c);
     }
+    else {
+        infeasible_prefixes.insert ( n->getTreePathString().p );
+    }
+
     focusNode = n;
   }
 }
@@ -529,7 +537,14 @@ void LGP_Tree::optFirstOnLevel(BoundType bound, LGP_NodeL& fringe, LGP_NodeL* ad
     }
 
     if(n->feasible(bound)) {
+      if (bound == BD_path || bound == BD_seqPath )
+      {
+        feasible_prefixes.insert ( n->getTreePathString().p );
+      }
       if(addIfTerminal && n->isTerminal) addIfTerminal->append(n);
+    }
+    else {
+        infeasible_prefixes.insert ( n->getTreePathString().p );
     }
     focusNode = n;
   }
