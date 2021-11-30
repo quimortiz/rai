@@ -619,7 +619,7 @@ void LGP_Tree::step() {
   optFirstOnLevel(BD_pose, fringe_poseToGoal, &fringe_seq);
   optBestOnLevel(BD_seq, fringe_seq, BD_pose, &fringe_path, nullptr);
   if(verbose>0 && fringe_path.N) cout <<"EVALUATING PATH " <<fringe_path.last()->getTreePathString() <<endl;
-  optBestOnLevel(BD_seqPath, fringe_path, BD_seq, &fringe_solved, nullptr);
+  optBestOnLevel(BD_path, fringe_path, BD_seq, &fringe_solved, nullptr);
 
   if(fringe_solved.N>numSol) {
     if(verbose>0) cout <<"NEW SOLUTION FOUND! " <<fringe_solved.last()->getTreePathString() <<endl;
