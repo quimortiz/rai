@@ -76,9 +76,11 @@ void initFolStateFromKin(FOL_World& L, const Configuration& C) {
       for(Node* n:G) L.addFact({n->key, a->name});
       //      L.addFact({"initial", a->name}); //*** THE INITIAL FACT WAS INTRODUCED TO SIMPLIFY SKELETONS - OBSOLETE ***
       isSymbol(a->ID)=true;
+      L.addFact({"is_same",  a->name, a->name});
     }else if(a->joint && a->joint->type==JT_rigid){ //-- implicit object
       L.addFact({"object", a->name});
       isSymbol(a->ID)=true;
+      L.addFact({"is_same",  a->name, a->name});
       if(a->shape && a->shape->type()==ST_ssBox){ //-- implicit box
         L.addFact({"is_box", a->name});
       }
