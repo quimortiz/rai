@@ -121,7 +121,7 @@ struct KOMO : NonCopyable {
   ptr<struct Objective> add_qControlObjective(const arr& times, uint order, double scale=1., const arr& target=NoArr, int deltaFromStep=0, int deltaToStep=0);
   void addQuaternionNorms(const arr& times=NoArr, double scale=3e0, bool hard=true);
 
-  void add_collision(bool hardConstraint, double margin=.0, double prec=1e1);
+  void add_collision(bool hardConstraint, double margin=.0, double prec=5);
   void add_jointLimits(bool hardConstraint, double margin=.05, double prec=1.);
   void setLiftDownUp(double time, const char* endeff, double timeToLift=.15);
   void setSlow(double startTime, double endTime, double prec=1e1, bool hardConstrained=false);
