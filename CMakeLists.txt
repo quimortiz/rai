@@ -75,7 +75,8 @@ add_library(rai SHARED
 
 target_link_libraries(rai
   jsoncpp lapack blas pthread rt X11
-  assimp fcl ann glfw GLEW glut GLU GL png qhull
+  assimp /usr/lib/x86_64-linux-gnu/libfcl.so
+  ann glfw GLEW glut GLU GL png qhull
   )
 
 ################################################################################
