@@ -564,9 +564,9 @@ void Configuration::setJointState(const arr& _q, const FrameL& F) {
   uint nd=0;
   for(Frame* f:F) {
     Joint* j = f->joint;
+    if(!j) continue;
     if(!j && !f->forces.N) HALT("frame '" <<f->name <<"' is not a joint and has no forces!");
     if(!j->mimic) CHECK_LE(nd+j->dim,_q.N, "given q-vector too small");
-    if(!j) continue;
     if(j->active){
       if(!j->mimic){
         for(uint ii=0; ii<j->dim; ii++) q.elem(j->qIndex+ii) = _q(nd+ii);
@@ -583,6 +583,7 @@ void Configuration::setJointState(const arr& _q, const FrameL& F) {
   }
   for(Frame* f:F) {
     for(ForceExchange* c: f->forces) if(&c->a==f){
+      for(uint ii=0; ii<c->getDimFromType(); ii++) q.elem(c->qIndex+ii) = _q(nd+ii);
       c->setDofs(q, c->qIndex);
       nd += c->getDimFromType();
     }
@@ -737,18 +738,16 @@ arr Configuration::getLimits() const {
       }
     }
   }
-#if 0
+#if 1
   for(ForceExchange* f: forces) {
     uint i=f->qIndex;
     uint d=f->getDimFromType();
-    CHECK_EQ(d, 6, "");
-    for(uint k=0; k<3; k++) {
-      limits(i+k, 0)=-10.; //lo
-      limits(i+k, 1)=+10.; //up
-    }
-    for(uint k=3; k<6; k++) {
-      limits(i+k, 0)=-1.; //lo
-      limits(i+k, 1)=+1.; //up
+    // This is only tested with the forceExchange used in quadrotors
+    // (that are 1-dimensional for the motor force)
+    CHECK_EQ(d, 1, "");
+    for(uint k=0; k<d; k++) {
+      limits(i+k, 0)=f->limits(0); //lo
+      limits(i+k, 1)=f->limits(1); //up
     }
   }
 #endif
